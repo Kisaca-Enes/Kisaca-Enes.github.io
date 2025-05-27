@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enes Security - Güvenlik Testleri</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1f1f1f;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    .nav-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      background-color: #2a2a2a;
+      padding: 1rem;
+    }
+    .nav-buttons button {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .nav-buttons button:hover {
+      background-color: #444;
+    }
+    .content-section {
+      display: none;
+      padding: 2rem;
+      background-color: #1e1e1e;
+      margin: 1rem;
+      border-radius: 0.5rem;
+    }
+    .active {
+      display: block;
+    }
+    .sub-buttons button {
+      background-color: #444;
+      color: #fff;
+      margin: 0.25rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.4rem;
+      cursor: pointer;
+    }
+    .sub-buttons button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Enes Security</h1>
+    <p>Antivirüs Testleri, Exploitler ve Güvenlik Blogu</p>
+  </header>
+
+  <div class="nav-buttons">
+    <button onclick="showSection('antivirus')">Antivirüs Raporları</button>
+    <button onclick="showSection('announcements')">Duyurular</button>
+    <button onclick="showSection('exploits')">Exploit Paylaşımları</button>
+    <button onclick="showSection('blog')">Yeni Blog Yazıları</button>
+    <button onclick="showSection('coming-soon')">Yakında</button>
+    <button onclick="showSection('contact')">İletişim</button>
+  </div>
+
+  <div id="antivirus" class="content-section">
+    <h2>Antivirüs Raporları</h2>
+    <div class="sub-buttons">
+      <button onclick="window.open('raporlar/avast.html')">Avast</button>
+      <button onclick="window.open('raporlar/bitdefender.html')">Bitdefender</button>
+      <button onclick="window.open('raporlar/kaspersky.html')">Kaspersky</button>
+    </div>
+  </div>
+
+  <div id="announcements" class="content-section">
+    <h2>Duyurular</h2>
+    <p>Site ile ilgili güncellemeler ve yeni içerikler burada paylaşılacak.</p>
+  </div>
+
+  <div id="exploits" class="content-section">
+    <h2>Exploit Paylaşımları</h2>
+    <div class="sub-buttons">
+      <button onclick="window.open('exploits/windows-lpe.html')">Windows LPE</button>
+      <button onclick="window.open('exploits/linux-kernel.html')">Linux Kernel</button>
+      <button onclick="window.open('exploits/web-xss.html')">Web XSS</button>
+    </div>
+  </div>
+
+  <div id="blog" class="content-section">
+    <h2>Yeni Blog Yazıları</h2>
+    <div class="sub-buttons">
+      <button onclick="window.open('blog/antivirus-analizi.html')">Antivirüs Analizi</button>
+      <button onclick="window.open('blog/zero-day.html')">Zero-Day Geliştirme</button>
+    </div>
+  </div>
+
+  <!-- Yakında gelecek bölümü -->
+  <div id="coming-soon" class="content-section">
+    <h2>Yakında</h2>
+    <p>Bu bölüm üzerinde çalışıyoruz, yakında yeni içerikler eklenecek.</p>
+  </div>
+
+  <div id="contact" class="content-section">
+    <h2>İletişim</h2>
+    <p>GitHub: <a href="#">github.com/enes</a></p>
+    <p>E-posta: enes[at]securitylab[dot]tk</p>
+  </div>
+
+  <script>
+    function showSection(id) {
+      const sections = document.querySelectorAll('.content-section');
+      sections.forEach(section => section.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // Sayfa açıldığında varsayılan görünüm
+    showSection('antivirus');
+  </script>
+</body>
+</html>
