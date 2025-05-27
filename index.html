@@ -21,6 +21,30 @@
       margin: 0;
       font-size: 2rem;
     }
+    header .search-container {
+      margin-top: 1rem;
+    }
+    header input[type="text"] {
+      padding: 0.5rem;
+      border-radius: 0.3rem;
+      border: none;
+      width: 200px;
+      font-size: 1rem;
+    }
+    header button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.3rem;
+      cursor: pointer;
+      margin-left: 0.5rem;
+      font-size: 1rem;
+      background-color: #333;
+      color: #fff;
+      transition: background-color 0.3s ease;
+    }
+    header button:hover {
+      background-color: #444;
+    }
     .nav-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -63,23 +87,16 @@
     .sub-buttons button:hover {
       background-color: #555;
     }
-    #searchInput {
-      padding: 0.7rem 1rem;
-      border-radius: 0.5rem;
-      border: none;
-      width: 80%;
-      max-width: 500px;
-      margin: 1rem auto;
-      display: block;
-      background-color: #2b2b2b;
-      color: #fff;
-    }
   </style>
 </head>
 <body>
   <header>
     <h1>RAST Security</h1>
     <p>Antivirüs Testleri, Exploitler ve Güvenlik Blogu</p>
+    <div class="search-container">
+      <input id="searchInput" type="text" placeholder="Ara..." />
+      <button onclick="performSearch()">Ara</button>
+    </div>
   </header>
 
   <div class="nav-buttons">
@@ -90,9 +107,6 @@
     <button onclick="showSection('coming-soon')">Yakında</button>
     <button onclick="showSection('contact')">İletişim</button>
   </div>
-
-  <!-- Arama Kutusu -->
-  <input type="text" id="searchInput" placeholder="Aramak istediğiniz konuyu yazın..." oninput="searchSite()" />
 
   <div id="antivirus" class="content-section">
     <h2>Antivirüs Raporları</h2>
@@ -143,46 +157,48 @@
       document.getElementById(id).classList.add('active');
     }
 
-    function searchSite() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const sections = document.querySelectorAll('.content-section');
-
+    // Arama fonksiyonu
+    function performSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
       if (!query) {
-        // Arama kutusu boşsa her şeyi göster
-        showSection('antivirus');
-        sections.forEach(sec => {
-          const buttons = sec.querySelectorAll('.sub-buttons button');
-          buttons.forEach(btn => btn.style.display = '');
-        });
+        alert('Lütfen arama terimi girin.');
         return;
       }
 
-      let found = false;
+      const sections = {
+        antivirus: ['avast', 'bitdefender', 'kaspersky', 'antivirüs', 'rapor', 'antivirüs raporları'],
+        announcements: ['duyuru', 'güncelleme', 'haber', 'site duyuruları'],
+        exploits: ['exploit', 'lpe', 'linux', 'windows', 'xss', 'paylaşım', 'paylaşımlar'],
+        blog: ['blog', 'antivirüs analizi', 'zero-day', 'yazı', 'makale', 'geliştirme'],
+        'coming-soon': ['yakında', 'gelişme', 'çalışma'],
+        contact: ['iletişim', 'mail', 'email', 'github']
+      };
 
-      sections.forEach(section => {
-        const buttons = section.querySelectorAll('.sub-buttons button');
-        let matched = false;
-
-        buttons.forEach(button => {
-          if (button.innerText.toLowerCase().includes(query)) {
-            button.style.display = '';
-            matched = true;
-            found = true;
-          } else {
-            button.style.display = 'none';
-          }
-        });
-
-        if (matched) {
-          showSection(section.id);
-        }
+      // Öncelikle tüm bölümleri gizle
+      Object.keys(sections).forEach(id => {
+        document.getElementById(id).classList.remove('active');
       });
 
-      if (!found) {
-        alert("Aradığınız içerik bulunamadı.");
+      // Aramaya uygun bölümü bul
+      let foundSection = null;
+      for (const [sectionId, keywords] of Object.entries(sections)) {
+        for (const keyword of keywords) {
+          if (query.includes(keyword)) {
+            foundSection = sectionId;
+            break;
+          }
+        }
+        if (foundSection) break;
+      }
+
+      if (foundSection) {
+        document.getElementById(foundSection).classList.add('active');
+      } else {
+        alert('Aramanızla ilgili içerik bulunamadı.');
       }
     }
 
+    // Sayfa açıldığında varsayılan görünüm
     showSection('antivirus');
   </script>
 </body>
