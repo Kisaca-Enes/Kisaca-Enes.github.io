@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ransomware Test Raporu - 2025</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            padding: 30px;
+            max-width: 900px;
+            margin: auto;
+        }
+        h1, h2 {
+            border-bottom: 2px solid #444444;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        ul {
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+        p {
+            margin-bottom: 20px;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ransomware Test Raporu - 2025</h1>
+
+    <h2>Test Özeti</h2>
+    <p>
+        Bu rapor, 2025 yılı itibarıyla yaygın kullanılan antivirüs yazılımları Malwarebytes, Avast ve Windows Defender'ın ransomware saldırılarına karşı etkinliklerini değerlendirmek amacıyla hazırlanmıştır. Testte, özel geliştirilmiş bir ransomware pyload aracı kullanılmıştır.
+    </p>
+
+    <h2>Testte Kullanılan Yazılımlar</h2>
+    <ul>
+        <li>Malwarebytes</li>
+        <li>Avast Antivirus</li>
+        <li>Microsoft Windows Defender (Windows 10/11 sürümleri)</li>
+    </ul>
+
+    <h2>Saldırı Vektörü: Pyload</h2>
+    <p>
+        Testte kullanılan pyload, hedef sistemde belirli dosya uzantılarını (.txt, .png vb.) AES-256 CBC algoritması ile sabit anahtar ve IV kullanarak şifreleyen bir ransomware modülüdür. Şifreleme sonrası orijinal dosyalar üzerine şifreli içerik yazılmakta ve dosya uzantılarına <code>.dust</code> eki eklenmektedir. Ayrıca masaüstüne kullanıcıya fidye notu bırakılmaktadır.
+    </p>
+    <p>Pyload aşağıdaki adımları gerçekleştirmektedir:</p>
+    <ul>
+        <li>Kullanıcının profil dizini altındaki hedef uzantılı dosyaları tarar.</li>
+        <li>Dosyaları AES-256 CBC ile şifreler.</li>
+        <li>Dosyaların uzantılarını <code>.dust</code> olarak değiştirir.</li>
+        <li>Masaüstüne fidye notunu bırakır.</li>
+    </ul>
+
+    <h2>Test Sonuçları</h2>
+    <ul>
+        <li>Üç antivirüs yazılımı da pyload tarafından gerçekleştirilen dosya şifreleme saldırısını tespit edememiştir.</li>
+        <li>Dosyaların şifrelenmesi tamamlanmış ve dosya erişimi engellenmiştir.</li>
+        <li>Fidye notu sistemde görünür hale gelmiştir.</li>
+        <li>Antivirüslerin gerçek zamanlı koruma modülleri saldırıyı durduramamış, herhangi bir uyarı veya karantina işlemi gerçekleştirilmemiştir.</li>
+    </ul>
+
+    <h2>Değerlendirme</h2>
+    <p>
+        Test edilen antivirüs yazılımları, pyload tarafından uygulanan AES-256 tabanlı ransomware saldırısını tespit etmekte başarısız olmuştur. Bu durum, sabit anahtar ve IV kullanılması sebebiyle benzersiz imza oluşturulamaması ve pyload kodunun polimorfik veya obfuske olmamasına rağmen etkin bir tespit mekanizmasının devreye girmediğini göstermektedir.
+    </p>
+
+    <h2>Öneriler</h2>
+    <ul>
+        <li>Antivirüs ürünlerinin davranış analizi ve anomali tespiti modüllerinin güçlendirilmesi.</li>
+        <li>Dosya şifreleme faaliyetlerini gerçek zamanlı takip eden sistemlerin entegre edilmesi.</li>
+        <li>Sabit kriptografik anahtarlar yerine her kurulumda benzersiz anahtarların kullanılması.</li>
+        <li>Kullanıcı eğitimi ve sistem yedekleme politikalarının geliştirilmesi.</li>
+    </ul>
+</body>
+</html>
