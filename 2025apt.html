@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>APT Simülasyon Test Raporu - 2025</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; background-color: #f9f9f9; color: #333; }
+    h1, h2, h3 { color: #1a1a1a; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 10px; text-align: center; }
+    th { background-color: #efefef; }
+    .badge { padding: 4px 8px; border-radius: 4px; }
+    .yes { background-color: #c8e6c9; color: #256029; }
+    .no { background-color: #ffcdd2; color: #c62828; }
+    .partial { background-color: #fff9c4; color: #f57f17; }
+  </style>
+</head>
+<body>
+  <h1>APT Simülasyon Test Raporu - 2025</h1>
+  <p><strong>Hazırlayan:</strong> Kısaca-Enes(Nullsans)</p>
+  <p><strong>Amaç:</strong> Farklı antivirüs yazılımlarına karşı hedef sistemde gerçekleştirilmiş APT (Advanced Persistent Threat) saldırı senaryolarının tespit edilebilirliğini değerlendirmek.</p>
+  
+  <h2>Test Ortamı</h2>
+  <ul>
+    <li><strong>İşletim Sistemi:</strong> Windows 10 Pro (21H2), 64-bit</li>
+    <li><strong>Test Makinesi:</strong> VM ortamında, internet bağlantılı, 4 GB RAM, 2 CPU</li>
+    <li><strong>Antivirüsler:</strong> Varsayılan ayarlar ile yüklü (gerçek zamanlı koruma açık)</li>
+    <li><strong>Test Süreci:</strong> Tüm saldırılar manuel olarak tetiklenmiş, sonuçlar anlık izleme ile kaydedilmiştir.</li>
+  </ul>
+
+  <h2>1. Saldırı Senaryoları</h2>
+  <table>
+    <tr><th>Senaryo</th><th>Açıklama</th><th>Teknik</th></tr>
+    <tr><td>1</td><td>Saldırgan, hedef sisteme bir DLL yükleyerek PowerShell tabanlı AES şifreli bir C2 (komut ve kontrol) kanalı oluşturdu. Komutlar şifreli biçimde alındı ve sonuçlar gizli olarak gönderildi.</td><td>Reflective DLL Injection, AES</td></tr>
+    <tr><td>2</td><td>Bir VBS script'i ile PowerShell üzerinden ters bağlantı kuruldu. Saldırgan, bu bağlantı sayesinde sistem üzerinde komut yürüttü ve tüm işlemler arka planda gerçekleşti.</td><td>LOLBin, Reverse Shell</td></tr>
+    <tr><td>3</td><td>Hedef sistemde RDP servisi sessizce aktif hale getirildi ve saldırgan oturumu görünmeden aldı. Böylece sistem tam kontrol altına alındı.</td><td>Registry, RDP Abuse</td></tr>
+    <tr><td>4</td><td>WMI Event Subscription kullanılarak tetikleyici bir olayla birlikte belirli aralıklarla zararlı PowerShell komutları çalıştırıldı. Bu, saldırgana kalıcılık ve gizlilik sağladı.</td><td>WMI Event Subscription</td></tr>
+    <tr><td>5</td><td>Saldırgan, modüler PowerShell yükleri kullanarak Defender'ı devre dışı bıraktı. Ardından ekran görüntüsü alma, tuş kaydı ve shellcode enjeksiyonu gibi faaliyetler gerçekleştirildi.</td><td>Modüler PS, AMSI bypass</td></tr>
+    <tr><td>6</td><td>Bir web uygulaması üzerinden alınan kullanıcı girdisine zararlı PowerShell komutları enjekte edilerek doğrudan sistemde çalıştırıldı.</td><td>Command Injection</td></tr>
+    <tr><td>7</td><td>PowerShell Remoting özelliği kullanılarak ağ içindeki diğer makinelerle güvenilir bağlantı kuruldu. TrustedHosts yapılandırması genişletilerek lateral movement gerçekleştirildi.</td><td>WinRM Abuse</td></tr>
+  </table>
+
+  <h2>2. AV Tespit Tablosu</h2>
+  <table>
+    <tr>
+      <th>Senaryo</th><th>Windows Defender</th><th>Avast</th><th>AVG</th><th>Malwarebytes</th><th>Bitdefender</th>
+    </tr>
+    <tr><td>1</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+    <tr><td>2</td><td class="no">❌</td><td class="yes">✅</td><td class="yes">✅</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+    <tr><td>3</td><td class="yes">✅</td><td class="partial">❓</td><td class="partial">❓</td><td class="no">❌</td><td class="no">❌</td></tr>
+    <tr><td>4</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td class="yes">✅</td></tr>
+    <tr><td>5</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td class="yes">✅</td></tr>
+    <tr><td>6</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td></tr>
+    <tr><td>7</td><td class="partial">❓</td><td class="partial">❓</td><td class="partial">❓</td><td class="partial">❓</td><td class="partial">❓</td></tr>
+  </table>
+
+  <h2>3. Algılama Zamanı</h2>
+  <p>Tüm antivirüs yazılımları, tespit ettikleri saldırıları <strong>infaz (execution) anında</strong> algılamıştır.</p>
+  <ul>
+    <li><strong>Windows Defender:</strong> İnfaz esnasında</li>
+    <li><strong>Avast:</strong> İnfaz esnasında</li>
+    <li><strong>AVG:</strong> İnfaz esnasında</li>
+    <li><strong>Malwarebytes:</strong> İnfaz esnasında</li>
+    <li><strong>Bitdefender:</strong> İnfaz esnasında</li>
+  </ul>
+
+  <h2>4. Tespit Başarı Sıralaması</h2>
+  <table>
+    <tr><th>Antivirüs</th><th>Tam Tespit (✅)</th><th>Kısmi (❓)</th><th>Puan</th></tr>
+    <tr><td>Bitdefender</td><td>4</td><td>1</td><td><strong>4.5</strong></td></tr>
+    <tr><td>Malwarebytes</td><td>2</td><td>1</td><td><strong>2.5</strong></td></tr>
+    <tr><td>Avast</td><td>1</td><td>2</td><td><strong>2.0</strong></td></tr>
+    <tr><td>AVG</td><td>1</td><td>2</td><td><strong>2.0</strong></td></tr>
+    <tr><td>Windows Defender</td><td>1</td><td>1</td><td><strong>1.5</strong></td></tr>
+  </table>
+
+  <p><em>Not: Tespitler yalnızca yürütme (infaz) anında gerçekleşti. Hiçbir AV pre-execution seviyesinde tespit yapamadı.</em></p>
+</body>
+</html>
+
