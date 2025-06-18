@@ -3,115 +3,142 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RAST - Güvenlik Testleri</title>
+  <title>KARE Security - Güvenlik Testleri</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #121212;
+      font-family: 'Roboto', sans-serif;
+      background-color: #0f0f0f;
       color: #e0e0e0;
       margin: 0;
       padding: 0;
     }
     header {
-      background-color: #1f1f1f;
-      padding: 1.5rem;
+      background: linear-gradient(to right, #222, #111);
+      padding: 2rem 1rem;
       text-align: center;
+      box-shadow: 0 2px 10px #000;
     }
     header h1 {
       margin: 0;
-      font-size: 2rem;
+      font-size: 2.5rem;
+      letter-spacing: 1px;
     }
-    header .search-container {
+    header p {
+      margin-top: 0.3rem;
+      font-size: 1rem;
+      color: #aaa;
+    }
+    .search-container {
       margin-top: 1rem;
     }
-    header input[type="text"] {
-      padding: 0.5rem;
+    input[type="text"] {
+      padding: 0.6rem;
       border-radius: 0.3rem;
       border: none;
-      width: 200px;
+      width: 220px;
       font-size: 1rem;
+      background-color: #222;
+      color: #fff;
     }
-    header button {
-      padding: 0.5rem 1rem;
+    button {
+      padding: 0.6rem 1.2rem;
       border: none;
       border-radius: 0.3rem;
       cursor: pointer;
       margin-left: 0.5rem;
       font-size: 1rem;
-      background-color: #333;
+      background-color: #3a3a3a;
       color: #fff;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
     }
-    header button:hover {
-      background-color: #444;
+    button:hover {
+      background-color: #5a5a5a;
     }
     .nav-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
-      background-color: #2a2a2a;
+      background-color: #1c1c1c;
       padding: 1rem;
     }
     .nav-buttons button {
-      background-color: #333;
-      color: #fff;
-      border: none;
       padding: 0.75rem 1.5rem;
       border-radius: 0.5rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .nav-buttons button:hover {
-      background-color: #444;
+      font-weight: 500;
     }
     .content-section {
       display: none;
-      padding: 2rem;
-      background-color: #1e1e1e;
+      padding: 2rem 1.5rem;
       margin: 1rem;
-      border-radius: 0.5rem;
+      background-color: #181818;
+      border-radius: 0.6rem;
+      box-shadow: 0 0 10px #00000044;
     }
     .active {
       display: block;
+      animation: fadeIn 0.5s ease-in;
+    }
+    .sub-buttons {
+      margin-top: 1rem;
     }
     .sub-buttons button {
-      background-color: #444;
-      color: #fff;
-      margin: 0.25rem;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 0.4rem;
-      cursor: pointer;
+      margin: 0.3rem;
     }
-    .sub-buttons button:hover {
-      background-color: #555;
+    a {
+      color: #90caf9;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #1a1a1a;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      .nav-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      input[type="text"] {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>RAST Security</h1>
-    <p>Antivirüs Testleri, Exploitler ve Güvenlik Blogu</p>
+    <h1><i class="fa-solid fa-shield-halved"></i> KARE Security</h1>
+    <p>Antivirüs Testleri, Exploit Geliştirme ve Güvenlik Blogu</p>
     <div class="search-container">
-      <input id="searchInput" type="text" placeholder="Ara..." />
-      <button onclick="performSearch()">Ara</button>
+      <input id="searchInput" type="text" placeholder="Anahtar kelimeyle ara..." />
+      <button onclick="performSearch()"><i class="fa fa-search"></i> Ara</button>
     </div>
   </header>
 
   <div class="nav-buttons">
-    <button onclick="showSection('antivirus')">Antivirüs Raporları</button>
-    <button onclick="showSection('announcements')">Duyurular</button>
-    <button onclick="showSection('exploits')">Exploit Paylaşımları</button>
-    <button onclick="showSection('blog')">Yeni Blog Yazıları</button>
-    <button onclick="showSection('coming-soon')">Yakında</button>
-    <button onclick="showSection('contact')">İletişim</button>
+    <button onclick="showSection('antivirus')"><i class="fa-solid fa-bug"></i> Antivirüs Raporları</button>
+    <button onclick="showSection('announcements')"><i class="fa-solid fa-bullhorn"></i> Duyurular</button>
+    <button onclick="showSection('exploits')"><i class="fa-solid fa-skull-crossbones"></i> Exploitler</button>
+    <button onclick="showSection('blog')"><i class="fa-solid fa-pen"></i> Blog</button>
+    <button onclick="showSection('coming-soon')"><i class="fa-solid fa-hourglass-half"></i> Yakında</button>
+    <button onclick="showSection('contact')"><i class="fa-solid fa-envelope"></i> İletişim</button>
   </div>
 
-  <div id="antivirus" class="content-section">
+  <div id="antivirus" class="content-section active">
     <h2>Antivirüs Raporları</h2>
     <div class="sub-buttons">
-      <button onclick="window.open('rapor.html')">Ransomware2025 rapor</button>
+      <button onclick="window.open('rapor.html')">📝 Ransomware2025 Rapor</button>
       <button onclick="window.open('raporlar/bitdefender.html')">Bitdefender</button>
       <button onclick="window.open('raporlar/kaspersky.html')">Kaspersky</button>
     </div>
@@ -119,7 +146,7 @@
 
   <div id="announcements" class="content-section">
     <h2>Duyurular</h2>
-    <p>Site ile ilgili güncellemeler ve yeni içerikler burada paylaşılacak.</p>
+    <p>Güncel gelişmeler burada paylaşılacaktır.</p>
   </div>
 
   <div id="exploits" class="content-section">
@@ -141,7 +168,7 @@
 
   <div id="coming-soon" class="content-section">
     <h2>Yakında</h2>
-    <p>Bu bölüm üzerinde çalışıyoruz, yakında yeni içerikler eklenecek.</p>
+    <p>Yeni araçlar, payloadlar ve test senaryoları çok yakında!</p>
   </div>
 
   <div id="contact" class="content-section">
@@ -150,6 +177,10 @@
     <p>E-posta: enes[at]securitylab[dot]tk</p>
   </div>
 
+  <footer>
+    © 2025 KARE Security | Tüm testler yasal ve izinli ortamda gerçekleştirilmiştir.
+  </footer>
+
   <script>
     function showSection(id) {
       const sections = document.querySelectorAll('.content-section');
@@ -157,49 +188,38 @@
       document.getElementById(id).classList.add('active');
     }
 
-    // Arama fonksiyonu
     function performSearch() {
       const query = document.getElementById('searchInput').value.toLowerCase().trim();
-      if (!query) {
-        alert('Lütfen arama terimi girin.');
-        return;
-      }
+      if (!query) return alert('Lütfen arama terimi girin.');
 
       const sections = {
-        antivirus: ['avast', 'bitdefender', 'kaspersky', 'antivirüs', 'rapor', 'antivirüs raporları'],
-        announcements: ['duyuru', 'güncelleme', 'haber', 'site duyuruları'],
-        exploits: ['exploit', 'lpe', 'linux', 'windows', 'xss', 'paylaşım', 'paylaşımlar'],
-        blog: ['blog', 'antivirüs analizi', 'zero-day', 'yazı', 'makale', 'geliştirme'],
-        'coming-soon': ['yakında', 'gelişme', 'çalışma'],
-        contact: ['iletişim', 'mail', 'email', 'github']
+        antivirus: ['avast', 'bitdefender', 'kaspersky', 'antivirüs', 'rapor', 'virüs'],
+        announcements: ['duyuru', 'güncelleme', 'haber'],
+        exploits: ['exploit', 'lpe', 'xss', 'web', 'kernel'],
+        blog: ['blog', 'antivirüs analizi', 'zero-day', 'makale'],
+        'coming-soon': ['yakında', 'gelişme'],
+        contact: ['iletişim', 'github', 'mail']
       };
 
-      // Öncelikle tüm bölümleri gizle
       Object.keys(sections).forEach(id => {
         document.getElementById(id).classList.remove('active');
       });
 
-      // Aramaya uygun bölümü bul
       let foundSection = null;
       for (const [sectionId, keywords] of Object.entries(sections)) {
-        for (const keyword of keywords) {
-          if (query.includes(keyword)) {
-            foundSection = sectionId;
-            break;
-          }
+        if (keywords.some(k => query.includes(k))) {
+          foundSection = sectionId;
+          break;
         }
-        if (foundSection) break;
       }
 
       if (foundSection) {
         document.getElementById(foundSection).classList.add('active');
       } else {
-        alert('Aramanızla ilgili içerik bulunamadı.');
+        alert('Arama sonuç getirmedi.');
       }
     }
-
-    // Sayfa açıldığında varsayılan görünüm
-    showSection('antivirus');
   </script>
 </body>
 </html>
+
