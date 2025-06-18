@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>APT Simülasyon Test Raporu - 2025</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 30px; background-color: #f9f9f9; color: #333; }
@@ -31,18 +31,21 @@
   </ul>
 
   <h2>1. Saldırı Senaryoları</h2>
-  <p><strong>Senaryo 1:</strong> DLL dosyası aracılığıyla kötü amaçlı yük sistemde çalıştırıldı. DLL, PowerShell tabanlı AES şifreli komut alma ve sonuç gönderme mekanizması ile komut ve kontrol (C2) kanalı kurdu. Saldırgan, bu yöntemle hedef sistem üzerinde sürekli ve gizli iletişim sağladı.</p>
-  <p><strong>Senaryo 2:</strong> VBS script ile PowerShell ters bağlantı oluşturuldu. Bu yöntemle saldırgan, hedef makineden komut yürütme imkanı elde etti. PowerShell işlemi arka planda gizli olarak çalıştırıldı ve ağ üzerinden çift yönlü komut/cevap akışı sağlandı.</p>
-  <p><strong>Senaryo 3:</strong> Uzak Masaüstü Protokolü (RDP) arka planda başlatılarak, saldırganın hedef makinenin tam kontrolünü sağlaması amaçlandı. Bu işlem görünmez modda yürütülerek iz bırakmadan erişim sağlandı.</p>
-  <p><strong>Senaryo 4:</strong> WMI Event Subscription mekanizması kullanılarak periyodik olarak kötü amaçlı PowerShell komutları çalıştıran bir arka kapı oluşturuldu. Böylece hedef sistemde kalıcı erişim sağlanırken, trafik normal WMI trafiği gibi gizlendi.</p>
-  <p><strong>Senaryo 5:</strong> Modüler PowerShell yükleriyle Defender’ın gerçek zamanlı koruması devre dışı bırakıldı, ekran görüntüsü alma, tuş kaydı toplama ve shellcode enjekte etme gibi ileri seviye kötü amaçlı faaliyetler başlatıldı. Tüm bu eylemler uzaktan PS Remoting veya ters shell ile kontrol edildi.</p>
-  <p><strong>Senaryo 6:</strong> Kullanıcı girdisi üzerinden gelen komut enjeksiyon açığı istismar edilerek PowerShell komutları doğrudan hedef sistemde yürütüldü. Bu yöntemle saldırgan, hedefin güvenlik sınırlarını aşarak zararlı kod çalıştırdı.</p>
-  <p><strong>Senaryo 7:</strong> PowerShell Remoting (WinRM) servisi etkinleştirilerek, uzak sistemler arası komut çalıştırma için güvenilir bağlantılar kuruldu. TrustedHosts ayarları genişletilerek saldırganın ağdaki diğer makinelerle kolayca iletişim kurması sağlandı.</p>
+  <table>
+    <tr><th>Senaryo</th><th>Açıklama</th><th>Teknik</th></tr>
+    <tr><td>1</td><td>DLL dosyası aracılığıyla kötü amaçlı yük sistemde çalıştırıldı. DLL, PowerShell tabanlı AES şifreli komut alma ve sonuç gönderme mekanizması ile komut ve kontrol (C2) kanalı kurdu. Saldırgan, bu yöntemle hedef sistem üzerinde sürekli ve gizli iletişim sağladı.</td><td>Reflective DLL Injection, AES</td></tr>
+    <tr><td>2</td><td>VBS script ile PowerShell ters bağlantı oluşturuldu. Bu yöntemle saldırgan, hedef makineden komut yürütme imkanı elde etti. PowerShell işlemi arka planda gizli olarak çalıştırıldı ve ağ üzerinden çift yönlü komut/cevap akışı sağlandı.</td><td>LOLBin, Reverse Shell</td></tr>
+    <tr><td>3</td><td>Uzak Masaüstü Protokolü (RDP) arka planda başlatılarak, saldırganın hedef makinenin tam kontrolünü sağlaması amaçlandı. Bu işlem görünmez modda yürütülerek iz bırakmadan erişim sağlandı.</td><td>Registry, RDP Abuse</td></tr>
+    <tr><td>4</td><td>WMI Event Subscription mekanizması kullanılarak periyodik olarak kötü amaçlı PowerShell komutları çalıştıran bir arka kapı oluşturuldu. Böylece hedef sistemde kalıcı erişim sağlanırken, trafik normal WMI trafiği gibi gizlendi.</td><td>WMI Event Subscription</td></tr>
+    <tr><td>5</td><td>Modüler PowerShell yükleriyle Defender’ın gerçek zamanlı koruması devre dışı bırakıldı, ekran görüntüsü alma, tuş kaydı toplama ve shellcode enjekte etme gibi ileri seviye kötü amaçlı faaliyetler başlatıldı. Tüm bu eylemler uzaktan PS Remoting veya ters shell ile kontrol edildi.</td><td>Modüler PS, AMSI bypass</td></tr>
+    <tr><td>6</td><td>Kullanıcı girdisi üzerinden gelen komut enjeksiyon açığı istismar edilerek PowerShell komutları doğrudan hedef sistemde yürütüldü. Bu yöntemle saldırgan, hedefin güvenlik sınırlarını aşarak zararlı kod çalıştırdı.</td><td>Command Injection</td></tr>
+    <tr><td>7</td><td>PowerShell Remoting (WinRM) servisi etkinleştirilerek, uzak sistemler arası komut çalıştırma için güvenilir bağlantılar kuruldu. TrustedHosts ayarları genişletilerek saldırganın ağdaki diğer makinelerle kolayca iletişim kurması sağlandı.</td><td>WinRM Abuse</td></tr>
+  </table>
 
   <h2>2. AV Tespit Tablosu</h2>
   <table>
     <tr>
-      <th>Senaryo</th><th>Defender</th><th>Avast</th><th>AVG</th><th>Malwarebytes</th><th>Bitdefender</th>
+      <th>Senaryo</th><th>Windows Defender</th><th>Avast</th><th>AVG</th><th>Malwarebytes</th><th>Bitdefender</th>
     </tr>
     <tr><td>1</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td class="yes">✅</td><td class="yes">✅</td></tr>
     <tr><td>2</td><td class="no">❌</td><td class="yes">✅</td><td class="yes">✅</td><td class="yes">✅</td><td class="yes">✅</td></tr>
@@ -67,10 +70,10 @@
   <table>
     <tr><th>Antivirüs</th><th>Tam Tespit (✅)</th><th>Kısmi (❓)</th><th>Puan</th></tr>
     <tr><td>Bitdefender</td><td>4</td><td>1</td><td><strong>4.5</strong></td></tr>
-    <tr><td>Malwarebytes</td><td>3</td><td>1</td><td><strong>3.5</strong></td></tr>
-    <tr><td>Avast</td><td>1</td><td>1</td><td><strong>1.5</strong></td></tr>
-    <tr><td>AVG</td><td>1</td><td>1</td><td><strong>1.5</strong></td></tr>
+    <tr><td>Malwarebytes</td><td>2</td><td>1</td><td><strong>2.5</strong></td></tr>
     <tr><td>Windows Defender</td><td>1</td><td>1</td><td><strong>1.5</strong></td></tr>
+    <tr><td>Avast</td><td>1</td><td>2</td><td><strong>2.0</strong></td></tr>
+    <tr><td>AVG</td><td>1</td><td>2</td><td><strong>2.0</strong></td></tr>
   </table>
 
   <p><em>Not: Tespitler yalnızca yürütme (infaz) anında gerçekleşti. Hiçbir AV pre-execution seviyesinde tespit yapamadı.</em></p>
