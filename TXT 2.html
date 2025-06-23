@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>In-depth Malware Analysis Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      color: #222;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    .highlight {
+      background-color: #ffefc4;
+      padding: 5px 10px;
+      border-left: 4px solid #ffc107;
+      margin: 10px 0;
+    }
+    .ioc {
+      background-color: #e3f2fd;
+      padding: 10px;
+      border-left: 4px solid #2196f3;
+      margin: 10px 0;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .gallery img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>In-depth Analysis of a Newly Discovered MSI-Based Malware</h1>
+    <p><strong>Author:</strong> Nullsans and GPT</p>
+
+    <h2>1. Malware Overview</h2>
+    <ul>
+      <li><strong>File Type:</strong> Windows Installer Package (.msi)</li>
+      <li><strong>Behavior:</strong> Silently drops malicious PE and DLL files into hidden locations such as AppData and Startup folders.</li>
+      <li><strong>Persistence:</strong> Creates .lnk shortcut files for auto-launch at system startup.</li>
+      <li><strong>Command & Control (C2):</strong> HTTP with TLS encryption.</li>
+      <li><strong>Architecture:</strong> Modular with helper DLLs and obfuscation.</li>
+    </ul>
+
+    <h2>2. Technical Operation</h2>
+    <h3>a) Installation & Propagation</h3>
+    <ul>
+      <li>Copies itself to AppData during install.</li>
+      <li>Drops PE and DLL payloads.</li>
+      <li>Creates .lnk files for persistence.</li>
+    </ul>
+
+    <h3>b) System & API Usage</h3>
+    <ul>
+      <li>Uses <code>CreateProcess</code>, <code>WriteProcessMemory</code>, <code>VirtualAlloc</code>.</li>
+      <li>Modifies registry keys for startup execution.</li>
+      <li>Loads PowerShell BitLocker module.</li>
+    </ul>
+
+    <h3>c) Network & C2</h3>
+    <ul>
+      <li>Encrypted traffic over HTTP+TLS.</li>
+      <li>Supports dynamic tasking and data exfiltration.</li>
+      <li>Targets Chromium-based browsers for data theft.</li>
+    </ul>
+
+    <h3>d) Stealth & Obfuscation</h3>
+    <ul>
+      <li>Uses <code>async_hooks</code> and <code>async_context_frame</code> from Node.js.</li>
+      <li>Custom PE sections to hinder analysis.</li>
+      <li>Multi-layered obfuscation strategies.</li>
+    </ul>
+
+    <h2>3. Analysis Techniques</h2>
+    <h3>Static</h3>
+    <ul>
+      <li>Inspect PE headers and import tables.</li>
+      <li>Trace memory and process APIs.</li>
+      <li>Review async_hooks structure.</li>
+    </ul>
+    <h3>Dynamic</h3>
+    <ul>
+      <li>Use sandboxes and Process Monitor.</li>
+      <li>Analyze TLS network traffic (Wireshark).</li>
+      <li>Study dropped files in VM.</li>
+    </ul>
+
+    <h2>4. Defense Recommendations</h2>
+    <div class="highlight">
+      <ul>
+        <li>Don’t run unknown .msi installers.</li>
+        <li>Use EDR with behavioral detection.</li>
+        <li>Audit Startup folders and registry often.</li>
+        <li>Flag encrypted outbound HTTP traffic.</li>
+        <li>Harden PowerShell usage with policies.</li>
+        <li>Block known hashes and IPs using IoCs.</li>
+      </ul>
+    </div>
+
+    <h2>5. Conclusion</h2>
+    <p>
+      This malware disguises itself as an innocent MSI installer, but beneath that surface, it employs advanced methods to persist, communicate secretly, and steal sensitive information. A multi-layered defense strategy is crucial to mitigate such threats.
+    </p>
+
+    <h2>6. Indicators of Compromise (IoCs)</h2>
+    <div class="ioc">
+      <ul>
+        <li><strong>MSI Hash:</strong> 97707cb776e5028f0bbf676505e894a6</li>
+        <li><strong>Dropped Files:</strong> sahm.exe, DLL modules</li>
+        <li><strong>Shortcuts:</strong> .lnk files in Startup/Desktop</li>
+      </ul>
+    </div>
+
+    <h2>7. Analysis Images</h2>
+    <div class="gallery">
+      <!-- Example image placeholder -->
+      <img src="screenshot1.png" alt="Process Monitor Output" />
+      <img src="screenshot2.png" alt="Dropped Files" />
+      <img src="screenshot3.png" alt="Network Capture" />
+      <!-- Add more images as needed -->
+    </div>
+
+    <p><em>If you have more findings or questions, feel free to reach out or contribute!</em></p>
+  </div>
+</body>
+</html>
+
