@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kare Security</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #121212;
+      color: #eee;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      background: #1f1f1f;
+      padding: 15px 0;
+      border-bottom: 2px solid #e63946;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #e63946;
+    }
+
+    .logo span {
+      color: #f1faee;
+    }
+
+    .menu {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .menu li a {
+      text-decoration: none;
+      color: #eee;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .menu li a:hover {
+      color: #e63946;
+    }
+
+    /* Duyurular */
+    .duyurular {
+      background: #272727;
+      padding: 30px 0;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+
+    .duyurular h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #e63946;
+      font-size: 2rem;
+    }
+
+    .duyuru-listesi {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .duyuru {
+      background: #1f1f1f;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border-left: 5px solid #e63946;
+      border-radius: 5px;
+    }
+
+    .duyuru h3 {
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+      color: #f1faee;
+    }
+
+    .duyuru p {
+      color: #ccc;
+    }
+
+    /* Alanlar (kartlar) */
+    .alanlar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin: 40px 0;
+    }
+
+    .kart {
+      background: #1f1f1f;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      color: #f1faee;
+      text-decoration: none;
+      box-shadow: 0 0 10px rgba(230, 57, 70, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .kart:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px rgba(230, 57, 70, 0.7);
+    }
+
+    .kart h3 {
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
+
+    .kart p {
+      color: #ccc;
+      font-size: 1rem;
+    }
+
+    /* Footer */
+    footer {
+      background: #1f1f1f;
+      padding: 20px 0;
+      margin-top: auto;
+      border-top: 2px solid #e63946;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-container p {
+      color: #ccc;
+    }
+
+    .social a {
+      margin-left: 15px;
+      font-size: 1.4rem;
+      color: #eee;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .social a:hover {
+      color: #e63946;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .header-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .menu {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .footer-container {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+
+      .social a {
+        margin-left: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-container">
+      <div class="logo">Kare <span>Security</span></div>
+      <nav>
+        <ul class="menu">
+          <li><a href="ctf.html">CTF</a></li>
+          <li><a href="raporlar.html">Raporlar</a></li>
+          <li><a href="https://nullflare.blogspot.com/">Blog</a></li>
+          <li><a href="https://karesecurity.wixsite.com/karesecurity">Forum</a></li>
+          <li><a href="redteam.html">Red Team Tool</a></li>
+          <li><a href="blueteam.html">Blue Team Tool</a></li>
+          <li><a href="#duyurular">Duyurular</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="duyurular" class="duyurular">
+      <h2>Duyurular</h2>
+      <div class="duyuru-listesi">
+        <article class="duyuru">
+          <h3>CTF Sonuçları Açıklandı!</h3>
+          <p>Kare Security'nin ilk CTF etkinliği başarıyla tamamlandı. Kazananları tebrik ederiz!</p>
+        </article>
+        <article class="duyuru">
+          <h3>Yeni Blog Yayında: Siber Güvenlik Temelleri</h3>
+          <p>Başlangıç seviyesinden ileri seviyeye siber güvenlik yazılarımız yayında, takipte kalın.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="alanlar container">
+      <a href="ctf.html" class="alan kart">
+        <h3>CTF</h3>
+        <p>Etkinlikler ve yarışmalar</p>
+      </a>
+      <a href="raporlar.html" class="alan kart">
+        <h3>Raporlar</h3>
+        <p>Güvenlik analizleri ve exploit raporları</p>
+      </a>
+      <a href="https://nullflare.blogspot.com/" class="alan kart">
+        <h3>Blog</h3>
+        <p>Güncel haberler ve eğitim yazıları</p>
+      </a>
+      <a href="https://karesecurity.wixsite.com/karesecurity" class="alan kart">
+        <h3>Forum</h3>
+        <p>Tartışma ve yardım platformu</p>
+      </a>
+      <a href="redteam.html" class="alan kart">
+        <h3>Red Team Tool</h3>
+        <p>Penetrasyon araçları</p>
+      </a>
+      <a href="blueteam.html" class="alan kart">
+        <h3>Blue Team Tool</h3>
+        <p>Defans ve analiz araçları</p>
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-container">
+      <p>© 2025 Kare Security. Tüm hakları saklıdır.</p>
+      <div class="social">
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="#" aria-label="GitHub">🐙</a>
+        <a href="#" aria-label="LinkedIn">💼</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+

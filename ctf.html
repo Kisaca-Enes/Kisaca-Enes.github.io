@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kare Security - CTF</title>
+<style>
+  body {
+    background: #121212;
+    color: #eee;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  h1 {
+    color: #e63946;
+    margin-bottom: 15px;
+  }
+  p.intro {
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #ccc;
+  }
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+  }
+  .btn {
+    background: #1f1f1f;
+    padding: 25px 35px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(230, 57, 70, 0.5);
+    color: #f1faee;
+    font-size: 1.3rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    width: 200px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .btn:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 25px rgba(230, 57, 70, 0.8);
+    background: #e63946;
+    color: #121212;
+  }
+  footer {
+    margin-top: 60px;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  @media(max-width:600px) {
+    .btn {
+      width: 100%;
+      padding: 20px;
+      font-size: 1.2rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>CTF (Capture The Flag) Nedir?</h1>
+    <p class="intro">
+      CTF, bilgisayar güvenliği alanında düzenlenen yarışmalardır. Yarışmacılar çeşitli güvenlik açıklarını bulup çözerek "flag" (bayrak) adı verilen gizli kodları elde ederler. Flag'lar puan kazandırır ve takımlar ya da bireyler arasında yarışma yapılır.
+    </p>
+    <div class="buttons">
+      <a href="ctf_kernel.html" class="btn">1. Kernel CTF</a>
+      <a href="ctf_binary.html" class="btn">2. Binary CTF</a>
+      <a href="ctf_network.html" class="btn">3. Network CTF</a>
+      <a href="ctf_results.html" class="btn">CTF Yarışması Sonuçları</a>
+    </div>
+  </div>
+  <footer>
+    © 2025 Kare Security CTF Platformu
+  </footer>
+</body>
+</html>
+
