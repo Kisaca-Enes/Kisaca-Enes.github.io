@@ -1,1 +1,240 @@
-<h1>yakında</h1>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trojan.JAR.GitLoader-Tehdit Analizi Raporu</title>
+  <style>
+    body {
+      background: #f4f6f8;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 40px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #b71c1c;
+      margin-bottom: 30px;
+    }
+
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle at center, #e53935 0%, #b71c1c 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 28px;
+      font-weight: bold;
+      margin: 20px auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .score-circle:hover {
+      transform: scale(1.1);
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section h2 {
+      color: #d32f2f;
+      border-bottom: 2px solid #d32f2f;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+    }
+
+    .ioc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .ioc-table th,
+    .ioc-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    .ioc-table th {
+      background-color: #d32f2f;
+      color: #fff;
+    }
+
+    a {
+      color: #c62828;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .note {
+      background: #fff3cd;
+      color: #856404;
+      padding: 15px;
+      border-radius: 4px;
+      border: 1px solid #ffeeba;
+      margin-top: 20px;
+    }
+
+    .code-block {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Tehdit Analizi Raporu</h1>
+
+    <div class="score-circle">9/10</div>
+
+    <div class="section">
+      <h2>Özet</h2>
+      <p>
+        Analiz edilen zararlı yazılım, görünüşte <strong>oyun hilesi yükleyicisi (loader)</strong> gibi davranan, ancak arka planda sisteme izinsiz erişim sağlamaya çalışan bir tehdittir. 
+        Özellikle sosyal mühendislik ile kullanıcıyı kandırıp çalıştırılmasını sağlamakta ve Github üzerinden güncel zararlı içerikler (payload) indirerek antivirüslerden kaçmaktadır.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Tehdit Davranışları (Detaylı)</h2>
+      <ul>
+        <li>
+          <strong>Virüs Taramasını Bastırma:</strong>  
+          Dosya açıldığında, virüs tarama uyarılarını devre dışı bırakıyor. Böylece IDE veya çalışma ortamı zararsız gibi görünür.  
+          <div class="code-block">"ignore.virus.scanning.warn.message": "true"</div>
+        </li>
+
+        <li>
+          <strong>Kendini Kopyalama:</strong>  
+          JAR dosyası sisteme kopyalanıyor. Böylece kullanıcı dosyayı silse bile, zararlı sistemde kalıyor:
+          <div class="code-block">C:\Users\&lt;user&gt;\AppData\Local\yarim\yarim.jar</div>
+        </li>
+
+        <li>
+          <strong>Payload İndirme:</strong>  
+          Zararlı yazılım, Github’daki bir URL’den kod veya zararlı içerik (payload) indiriyor:
+          <div class="code-block">raw.githubusercontent.com (IP: 185.199.109.133)</div>
+          <em>Payload nedir?</em> Payload, saldırganın sisteme çalıştırmak için gönderdiği asıl kod veya komut dizileridir. Örneğin:
+          <ul>
+            <li>Shellcode (bellekte çalışan komutlar)</li>
+            <li>JavaScript, Python scriptleri</li>
+            <li>Komutlar veya zararlı güncellemeler</li>
+          </ul>
+          Amaç: Yeni zararlı işlevleri sisteme eklemek veya güncellemek.
+        </li>
+
+        <li>
+          <strong>Base64 Şifreleme:</strong>  
+          İndirilen payload, Base64 ile şifrelenmiş. Böylece:
+          <ul>
+            <li>Antivirüslerin zararlı kodu kolayca tanıması engellenir.</li>
+            <li>Ağ trafiğinde dosyanın zararlı olduğu anlaşılmaz.</li>
+          </ul>
+          <em>Örnek Base64 kodu:</em>
+          <div class="code-block">U2FtcGxlIFBheWxvYWQgRGF0YQ==</div>
+        </li>
+
+        <li>
+          <strong>Fileless (Disksiz) Çalışma:</strong>  
+          Zararlı kod, dosya sistemine yazılmadan bellekte çalıştırılıyor. Bu yöntem:
+          <ul>
+            <li>Antivirüslerin dosya taramalarını atlatır.</li>
+            <li>Disk üzerinde iz bırakmadığı için tespiti çok zorlaştırır.</li>
+          </ul>
+          Örneğin sandbox analizinde zararlıya yalnızca core dump (bellek dökümü) sırasında rastlandı:
+          <div class="code-block">/proc/3019/coredump_filter</div>
+        </li>
+
+        <li>
+          <strong>Registry Kalıcılığı:</strong>  
+          Zararlı yazılım kalıcılık için Windows kayıt defterine (Registry) kendini ekliyor. Böylece:
+          <ul>
+            <li>Bilgisayar yeniden başlasa bile çalışmaya devam eder.</li>
+            <li>CMD veya komut satırı açıldığında önce zararlı çalışır.</li>
+          </ul>
+          Değiştirilen anahtarlar:
+          <div class="code-block">
+            HKEY_CURRENT_USER\Software\Microsoft\Command Processor<br/>
+            HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor
+          </div>
+        </li>
+
+        <li>
+          <strong>Maskeleme Amaçlı Domain Kullanmalar:</strong>  
+          Bellekte StackOverflow, Mozilla Developer gibi meşru domain isimleri yer alıyor. Amaç:
+          <ul>
+            <li>Davranış tabanlı analizde dikkat çekmemek.</li>
+            <li>Legal trafik gibi görünmek.</li>
+          </ul>
+          Örnek domainler:
+          <ul>
+            <li>stackoverflow.com</li>
+            <li>developer.mozilla.org</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>IOC’ler (Indicator of Compromise)</h2>
+      <table class="ioc-table">
+        <tr>
+          <th>IOC Türü</th>
+          <th>Değer</th>
+        </tr>
+        <tr>
+          <td>Domain</td>
+          <td>raw.githubusercontent.com</td>
+        </tr>
+        <tr>
+          <td>IP</td>
+          <td>185.199.109.133</td>
+        </tr>
+        <tr>
+          <td>Dosya İsmi</td>
+          <td>yarim.jar</td>
+        </tr>
+        <tr>
+          <td>Registry Key</td>
+          <td>HKEY_CURRENT_USER\Software\Microsoft\Command Processor</td>
+        </tr>
+        <tr>
+          <td>Registry Key</td>
+          <td>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor</td>
+        </tr>
+        <tr>
+          <td>SHA256</td>
+          <td>2c7ffba90207e9358dd15112ed98b149928aead489fb09da28ebe671abdcea0d</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="note">
+      <strong>Tehdit Seviyesi:</strong> Bu zararlı, bireysel kullanıcılar için oldukça tehlikelidir (9/10). Oyun hilesi kisvesiyle sosyal mühendislik yapması, Github üzerinden güncel payload indirmesi ve fileless çalışması nedeniyle tespiti zordur.
+    </div>
+  </div>
+</body>
+</html>
