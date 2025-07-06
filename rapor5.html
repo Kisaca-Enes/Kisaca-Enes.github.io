@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mobile Malware Report</title>
+  <style>
+    body {
+      background-color: #f4f4f9;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    h2 {
+      color: #34495e;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+    }
+    p {
+      line-height: 1.6;
+    }
+    ul {
+      margin-top: 0;
+    }
+    .threat-score {
+      background-color: #e74c3c;
+      color: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mobile Malware Investigation Report</h1>
+    
+    <h2>Incident Summary</h2>
+    <ul>
+      <li>The detected malware is triggered via a <strong>Lua script designed for mobile devices</strong>.</li>
+      <li>The Lua script is executed through a <strong>game cheat application</strong>, likely running with root privileges.</li>
+      <li>Normally, escaping the sandbox of the game cheat app should not be possible. However, the attacker appears to have broken out of the sandbox by using certain <strong>custom API calls</strong> or possibly via a <strong>memory overflow exploit</strong>.</li>
+      <li>Following this, a <strong>malicious APK file</strong> is downloaded and attempts to install itself on the device.</li>
+      <li>The APK performs actions aiming to <strong>gain root privileges on the Android device</strong>.</li>
+      <li>If root access is obtained, it sets up an environment for a <strong>second-stage payload</strong>.</li>
+      <li>The malware hides itself in directories that are either inaccessible to antivirus solutions or have restricted monitoring permissions, such as:
+        <ul>
+          <li>/persist/</li>
+          <li>/mnt/vendor/persist/</li>
+          <li>/sys/</li>
+        </ul>
+      </li>
+      <li>Under normal circumstances, the malware produces no visible output. However, during our tests, we intentionally caused the application to crash, which revealed several <strong>critical details in the resulting error messages</strong>.</li>
+    </ul>
+    
+    <h2>False Flag Indicator (Chinese Connection)</h2>
+    <ul>
+      <li>After the crash, error messages contained:
+        <ul>
+          <li><strong>Chinese characters</strong> within the error output.</li>
+          <li>Certain <strong>class and package names</strong> following a “com.cn.*” naming pattern.</li>
+        </ul>
+      </li>
+      <li>This suggests that the malware might have been developed by <strong>Chinese developers</strong>.</li>
+      <li>However, the actor distributing the malware appears to be of <strong>Arabic origin</strong>.</li>
+      <li>Therefore, we strongly suspect the presence of a <strong>false flag operation</strong>. The attackers may have intentionally included Chinese strings and code fragments to mislead analysts and obscure their true identity.</li>
+    </ul>
+    
+    <div class="threat-score">
+      Threat Score: 9 / 10
+    </div>
+  </div>
+</body>
+</html>
