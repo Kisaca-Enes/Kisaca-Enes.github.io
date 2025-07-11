@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Malware Analiz Raporu</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+    }
+    h1 {
+      color: #ff4c4c;
+      border-bottom: 2px solid #444;
+      padding-bottom: 10px;
+    }
+    h2 {
+      color: #ffa500;
+      margin-top: 30px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+    }
+    p {
+      margin-top: 15px;
+      line-height: 1.6;
+    }
+    ul {
+      margin-top: 10px;
+      margin-left: 20px;
+    }
+    .highlight {
+      background-color: #2a2a2a;
+      padding: 15px;
+      border-left: 5px solid #ff4c4c;
+      margin: 20px 0;
+      font-style: italic;
+    }
+    .threat-score {
+      background-color: #b30000;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+    .malware-name {
+      background-color: #333;
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 4px;
+      color: #0ff;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Malware Analiz Sonucu ve Davranış Özeti</h1>
+
+    <p>Bu örnek malware, karmaşık ve çok katmanlı bir yapıya sahip. Node.js tabanlı runtime ortamında çalışan worker thread’lar (NodeWorker, NodeTracing gibi) ile çoklu iş parçacığı kullanıyor ve kendi içindeki debugging, tracing mekanizmalarıyla anti-debug ve anti-analysis önlemleri alıyor.</p>
+
+    <h2>Windows API Seviyesi Davranışlar</h2>
+    <ul>
+      <li><strong>Process Injection:</strong> CreateRemoteThread, OpenProcess, WriteProcessMemory, VirtualAllocEx gibi tipik process ve memory injection tekniklerini kullanıyor.</li>
+      <li>Dosya sistemi üzerinde okuma, yazma ve manipülasyon yapıyor.</li>
+      <li>Registry’den donanım ve sistem bilgisi toplayarak çevresel keşif (discovery) gerçekleştiriyor.</li>
+      <li>Network üzerinden HTTPS (TCP 443) bağlantıları ile command and control (C2) iletişimi kuruyor. Bu trafiği gizlemek için base64 kodlama, VLQ decoding ve source map işlemleri gibi karmaşık yöntemlere başvuruyor.</li>
+    </ul>
+
+    <h2>Tor İşlemi Davranışı</h2>
+    <p>Özellikle dikkat çekici nokta, arka planda 32-bit mimaride çalışan meşru görünen bir TOR işlemi (örneğin bir TOR node veya köprü olarak) barındırması. Bu işlem, dışardan bakıldığında sıradan ve zararsız bir süreç gibi görünse de, aslında malware’in kendi ağı içinde Tor ağı oluşturduğu ve bu ağ üzerinden gizli trafik yönlendirmesi yaptığı anlamına geliyor.</p>
+
+    <p>Yani malware, kendi ağında Tor’u köprü olarak kullanarak:</p>
+    <ul>
+      <li>Ağ trafiğini anonimleştiriyor, izlenmesini zorlaştırıyor.</li>
+      <li>Meşru process maskesi altında gizlenerek analizden kaçıyor.</li>
+      <li>Aynı zamanda payload ve komutlarını C2 server’a iletirken güvenli, şifreli ve anonim bir kanal sağlıyor.</li>
+    </ul>
+
+    <h2>Genel Özellikler</h2>
+    <ul>
+      <li>Çoklu teknoloji kullanıyor (Node.js, native Windows API).</li>
+      <li>Gelişmiş anti-debug önlemleri alıyor.</li>
+      <li>Process ve memory injection yapıyor.</li>
+      <li>Dosya sistemi ve registry üzerinde keşif ve manipülasyon yapıyor.</li>
+      <li>HTTPS tabanlı C2 ile iletişim kuruyor.</li>
+      <li>Ve en kritik olarak kendi ağında gizli Tor köprüsü kurarak trafiğini anonimleştiriyor ve bu işlemi meşru bir Windows süreci gibi gizliyor.</li>
+    </ul>
+
+    <div class="highlight">
+      Bu durum, malware’in sadece saldırı ve sızma amacı taşımadığını; aynı zamanda gelişmiş gizlilik, ağ yönlendirme ve iletişim anonimliği sağlama amacı da olduğunu gösteriyor.
+    </div>
+
+    <p>Bu zararlı yazılımın önerilen sınıflandırma ismi:</p>
+    <div class="malware-name">Trojan.TorBridge.Injector</div>
+
+    <div class="threat-score">
+      Tehdit Puanı: 10 / 10 🚨
+    </div>
+  </div>
+</body>
+</html>
