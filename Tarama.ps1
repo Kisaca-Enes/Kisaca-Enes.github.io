@@ -1,8 +1,8 @@
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-$ZipPath = "$env:USERPROFILE\Downloads\serevsiz.zip"
+$ZipPath = "D:\serevsiz.zip"
 $TempDir = "$env:TEMP\serevsiz_temp"
-$EncryptedZip = "$env:USERPROFILE\Downloads\serevsiz.remove"
+$EncryptedZip = "D:\serevsiz.remove"
 
 Write-Host "Tehdit silme işlemi başladı..."
 
@@ -14,7 +14,7 @@ try {
     [System.IO.Compression.ZipFile]::ExtractToDirectory($ZipPath, $TempDir)
     Write-Host "ZIP başarıyla açıldı."
 } catch {
-    Write-Host "ZIP açılamadı: $_"
+    Write-Host "❌ ZIP açılamadı: $_"
     exit
 }
 
