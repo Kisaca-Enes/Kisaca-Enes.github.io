@@ -1,51 +1,89 @@
-Write-Host "Tehdit durduruluyor..."
+Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-# 1. Prosesleri durdur
+$ZipPath = "$env:USERPROFILE\Downloads\serevsiz.zip"
+$TempDir = "$env:TEMP\serevsiz_temp"
+$EncryptedZip = "$env:USERPROFILE\Downloads\serevsiz.remove"
+
+Write-Host "Tehdit silme işlemi başladı..."
+
+# 1. ZIP'i geçici dizine aç
+if (Test-Path $TempDir) { Remove-Item $TempDir -Recurse -Force }
+New-Item -ItemType Directory -Path $TempDir | Out-Null
+
 try {
-    Get-Process | Where-Object { $_.ProcessName -like "*agent*" -or $_.ProcessName -like "*EaseUS*" } | Stop-Process -Force -ErrorAction SilentlyContinue
-    Write-Host "Tehdit prosesi durduruldu."
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($ZipPath, $TempDir)
+    Write-Host "ZIP başarıyla açıldı."
 } catch {
-    Write-Host "Proses bulunamadı veya zaten çalışmıyor."
+    Write-Host "ZIP açılamadı: $_"
+    exit
 }
 
-# 2. Dosya yolunu tanımla
-$Path = "$env:USERPROFILE\Downloads\a.zip"
-$Encrypted = "$env:USERPROFILE\Downloads\a.remove"
+# 2. EXE dosyalarını bul
+$ExeFiles = Get-ChildItem -Path $TempDir -Recurse -Include *.exe
+if ($ExeFiles.Count -eq 0) {
+    Write-Host "⚠️ ZIP içinde exe dosyası bulunamadı."
+} else {
+    Write-Host "$($ExeFiles.Count) adet exe dosyası bulundu."
+}
 
-# 3. Eğer dosya varsa şifrele ve .remove uzantısı ile kaydet
-if (Test-Path $Path) {
+# 3. EXE dosyalarına karşılık gelen prosesleri kapat
+foreach ($Exe in $ExeFiles) {
+    $ProcName = [System.IO.Path]::GetFileNameWithoutExtension($Exe.Name)
     try {
-        $Key = (1..32)
-        $IV = (1..16)
-        $AES = [System.Security.Cryptography.Aes]::Create()
-        $AES.Key = $Key
-        $AES.IV = $IV
-        $Encryptor = $AES.CreateEncryptor()
+        Get-Process -Name $ProcName -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+        if ($?) {
+            Write-Host "✅ Proses durduruldu: $ProcName"
+        } else {
+            Write-Host "⚠️ Proses bulunamadı veya durdurulamadı: $ProcName"
+        }
+    } catch {
+        Write-Host "❌ Proses kapatılırken hata: $ProcName"
+    }
+}
 
-        $In = [System.IO.File]::OpenRead($Path)
-        $Out = [System.IO.File]::Create($Encrypted)
+# 4. EXE dosyalarını şifrele
+$Key = (1..32)
+$IV = (1..16)
+$AES = [System.Security.Cryptography.Aes]::Create()
+$AES.Key = $Key
+$AES.IV = $IV
+$Encryptor = $AES.CreateEncryptor()
+
+foreach ($Exe in $ExeFiles) {
+    try {
+        $EncPath = "$($Exe.FullName).enc"
+        $In = [System.IO.File]::OpenRead($Exe.FullName)
+        $Out = [System.IO.File]::Create($EncPath)
         $Crypto = New-Object System.Security.Cryptography.CryptoStream($Out,$Encryptor,"Write")
         $In.CopyTo($Crypto)
         $Crypto.Close(); $In.Close(); $Out.Close()
-
-        Write-Host "Dosya şifrelendi ve uzantısı değiştirildi (.remove)."
+        Remove-Item $Exe.FullName -Force
+        Write-Host "🔐 Şifrelendi ve orijinali silindi: $($Exe.Name)"
     } catch {
-        Write-Host "Şifreleme sırasında hata oluştu: $_"
+        Write-Host "❌ Şifreleme hatası: $($Exe.Name)"
     }
-
-    # 4. Orijinal dosyayı sil
-    try {
-        Remove-Item -Path $Path -Force
-        Write-Host "Tehdit siliniyor..."
-        Start-Sleep -Seconds 2
-        if (-Not (Test-Path $Path)) {
-            Write-Host "✅ Tehdit başarıyla silindi."
-        } else {
-            Write-Host "⚠️ Tehdit silinmedi, manuel kontrol gerekli."
-        }
-    } catch {
-        Write-Host "Dosya silinemedi: $_"
-    }
-} else {
-    Write-Host "Dosya bulunamadı: $Path"
 }
+
+# 5. ZIP'i şifrele
+try {
+    $InZip = [System.IO.File]::OpenRead($ZipPath)
+    $OutZip = [System.IO.File]::Create($EncryptedZip)
+    $CryptoZip = New-Object System.Security.Cryptography.CryptoStream($OutZip,$Encryptor,"Write")
+    $InZip.CopyTo($CryptoZip)
+    $CryptoZip.Close(); $InZip.Close(); $OutZip.Close()
+    Write-Host "ZIP dosyası şifrelendi ve .remove uzantısı ile kaydedildi."
+} catch {
+    Write-Host "❌ ZIP şifreleme sırasında hata: $_"
+}
+
+# 6. Orijinal ZIP'i sil
+try {
+    Remove-Item -Path $ZipPath -Force
+    Write-Host "✅ Tehdit başarıyla silindi."
+} catch {
+    Write-Host "❌ Tehdit silinemedi, manuel müdahale gerekli."
+}
+
+# 7. Geçici dizini temizle
+Remove-Item $TempDir -Recurse -Force
+Write-Host "Temizlik işlemi tamamlandı."
