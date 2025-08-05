@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Malware Temizleme Raporu</title>
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9f9f9;
+    color: #222;
+    margin: 20px auto;
+    max-width: 900px;
+    line-height: 1.6;
+  }
+  h1, h2, h3 {
+    color: #003366;
+  }
+  h1 {
+    border-bottom: 3px solid #003366;
+    padding-bottom: 6px;
+  }
+  code, pre {
+    background: #222;
+    color: #eee;
+    font-family: Consolas, "Courier New", monospace;
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    display: block;
+    margin: 1em 0;
+  }
+  blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 1em;
+    color: #555;
+    margin: 1em 0;
+    background: #eee;
+    border-radius: 4px;
+  }
+  .warning {
+    background: #fff4e5;
+    border: 1px solid #ffa502;
+    padding: 12px;
+    margin: 1em 0;
+    border-radius: 5px;
+    color: #a65f00;
+  }
+  footer {
+    margin-top: 40px;
+    font-size: 0.9em;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Malware Temizleme Raporu</h1>
+<p><strong>Operasyon Adı:</strong> Malicious Content Durdurma, Temizleme ve Hesap Kurtarma</p>
+
+<h2>Başlangıç</h2>
+<p>
+Merhaba, öncelikle şunu netleştireyim; yaptıklarım tamamen gönüllü ve ücretsiz. İnsanlara yardım etmek amacıyla malware temizleme sürecini başlattım. Bu rapor uzun ve detaylı olacak; amacım yapılan her adımı mümkün olduğunca açık ve anlaşılır şekilde aktarmak. Hadi başlayalım.
+</p>
+
+<h2>Operasyonun Başlangıcı</h2>
+<p>
+Saat 11 civarında gelen bir mesajla bu operasyon başladı. İsmini vermek istemediğim bir kişinin Microsoft hesabı ele geçirilmişti. Hesabına durmadan saldırılar yapılıyordu. Hesabı geri almasına rağmen saldırgan yeni yöntemler bularak 6000 TL'ye yakın zarar çıkarmıştı. Ayrıca saldırgan başka hesaplara da sızmaya çalışıyordu.
+</p>
+<p>
+Kişiye hesap güvenliği için birkaç öneri sundum. Denemiş ama saldırı devam etmiş. Durumu derinlemesine araştırmaya karar verdim.
+</p>
+
+<h2>İlk İzlenimler &amp; Tehdit Kaynağı</h2>
+<p>
+Kişinin evde kardeşi var ve bilgisayarı kullanıyor, ancak bilgisayar hakkında fazla bilgisi yok. İnceleme sırasında bilgisayarda crackli oyunlar ve yazılımlar gördük. İlk şüphe bu yöndeydi ama kesin sebep değildi.
+</p>
+<p>
+Öncelikle <strong>Malwarebytes Premium</strong> ile tam tarama yaptık. Tarama sonucunda saldırganın registry üzerinden kalıcılık sağladığını gördük, yani sistemde aktif bir tehdit vardı.
+</p>
+<p>
+Tehdit türü: <em>Trojan.compromised Extension</em> — görünüşte meşru bir tarayıcı eklentisinin (Chrome veya Edge) kötü amaçlı hale gelmesiyle ortaya çıkan Trojan. Saldırgan, bir Google uzantısı üzerinden sisteme sızıyordu. Google Chrome’da sorun yoktu, ancak Microsoft Edge’de Malwarebytes uzantıların web sitelerini bile engelleyememeye başlamıştı.
+</p>
+
+<h2>Detaylı İnceleme &amp; İkinci Taramalar</h2>
+<p>
+Malwarebytes’tan sonra <strong>ESET Online Scanner</strong> ile tarama yaptık. Bu tarama 12 yeni tehdit buldu, toplamda 52 farklı tehdit vardı. İlginçtir ki zararlı, çok hızlı yayılıyordu ve normalin çok üstünde bulaşma gücüne sahipti.
+</p>
+<p>Burada klasik senaryo işliyordu:</p>
+<ul>
+  <li>Meşru bir uzantı (örneğin Color Picker, YouTube hız kontrolü)</li>
+  <li>Bir güncelleme ile içine kötü amaçlı kod enjekte edilmesi</li>
+  <li>Kullanıcının fark etmeden güncellemenin yüklenmesi</li>
+  <li>Uzantının her web sayfası ziyaretiyle veri toplaması, komut merkezine veri göndermesi, phishing tuzakları kurması, reklam dolandırıcılığı yapması veya arama sonuçlarını ele geçirmesi.</li>
+</ul>
+<p>Bu zararlı otomatik tekrar yüklenebiliyor; uzantı silinse bile görev zamanlayıcı ve registry ayarlarıyla kalıcı hale geliyor.</p>
+
+<h2>Kaldırma Stratejisi</h2>
+<p>Uzantıyı silmek yetmiyor; şunlar yapılmalı:</p>
+<ul>
+  <li>Uzantıyı tarayıcıdan kaldırmak</li>
+  <li>Windows Görev Zamanlayıcı’da şüpheli görevleri temizlemek (özellikle sistem32’den PowerShell script çalıştıranlar)</li>
+  <li>Registry anahtarlarını temizlemek:</li>
+</ul>
+<pre><code>HKLM\SOFTWARE\Policies\Google\Chrome\ExtensionInstallForcelist  
+HKLM\SOFTWARE\WOW6432Node\Policies\Google\Chrome\ExtensionInstallForcelist  
+HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallForcelist
+</code></pre>
+<p>Bu, uzantının yeniden kurulmasını engeller.</p>
+
+<h2>Sonraki Adımlar &amp; Kaspersky Taraması</h2>
+<p>
+En son Kaspersky anti-virüs kurduk ve tarama yaptık. Çok sayıda aktif ve pasif tehdit tespit etti. Bazıları silinememişti, bu da işimizi zorlaştırdı.
+</p>
+<p><strong>Öne çıkan tehdit:</strong><br/>
+<em>Trojan-Spy.Win32.Agent.kfph</em> — Kaspersky ve Microsoft tarafından casus yazılım olarak sınıflandırılan bir trojan.</p>
+
+<h3>Ne yapıyor?</h3>
+<ul>
+  <li>Klavye girdilerini kaydediyor</li>
+  <li>Ekran görüntüsü alıyor</li>
+  <li>Açık uygulamaları listeliyor</li>
+  <li>Topladığı verileri e-posta, HTTP, FTP üzerinden saldırgana gönderiyor</li>
+  <li>Ek zararlılar indirebiliyor, güncelleyebiliyor</li>
+  <li>Kayıt defterine ekleme yaparak başlangıçta çalışmayı garanti ediyor</li>
+</ul>
+<p>Bu familya davranışsal olarak çok esnek ve tehlikeli.</p>
+
+<h2>Yeni Tehditler &amp; UDS:DangerousObjectMulti.Generic</h2>
+<p>
+Bulut tabanlı algılama sistemi Kaspersky’nin hızlı tanımladığı potansiyel tehlike: <strong>UDS:DangerousObjectMulti.Generic</strong><br />
+Spesifik değil, ancak davranışsal olarak şüpheli. Bu, tam bir virüs değil; ancak sistemde risk taşıyan bir malware olarak değerlendirildi.
+</p>
+
+<h2>Manuel Temizleme</h2>
+<p>Bazı tehditler Kaspersky tarafından bile silinemediği için ağır manuel temizleme adımları uygulandı. İşte örnek PowerShell scriptimiz:</p>
+
+<div class="warning">
+<strong>UYARI:</strong> Bu PowerShell komutları bu kişiye özel olarak hazırlanmıştır. Genel kullanım için uygun değildir. Kendi sisteminizde kullanmadan önce dikkatlice inceleyin.
+</div>
+
+<pre><code>
+Write-Host "Tehdit durduruluyor..."
+
+# 1. Prosesleri durdur
+try {
+    Get-Process | Where-Object { $_.ProcessName -like "*agent*" -or $_.ProcessName -like "*EaseUS*" } | Stop-Process -Force -ErrorAction SilentlyContinue
+    Write-Host "Tehdit prosesi durduruldu."
+} catch {
+    Write-Host "Proses bulunamadı veya zaten çalışmıyor."
+}
+
+# 2. Dosya yolunu tanımla
+$Path = "$env:USERPROFILE\Downloads\a.zip"
+$Encrypted = "$env:USERPROFILE\Downloads\a.remove"
+
+# 3. Eğer dosya varsa şifrele ve .remove uzantısı ile kaydet
+if (Test-Path $Path) {
+    try {
+        $Key = (1..32)
+        $IV = (1..16)
+        $AES = [System.Security.Cryptography.Aes]::Create()
+        $AES.Key = $Key
+        $AES.IV = $IV
+        $Encryptor = $AES.CreateEncryptor()
+
+        $In = [System.IO.File]::OpenRead($Path)
+        $Out = [System.IO.File]::Create($Encrypted)
+        $Crypto = New-Object System.Security.Cryptography.CryptoStream($Out,$Encryptor,"Write")
+        $In.CopyTo($Crypto)
+        $Crypto.Close(); $In.Close(); $Out.Close()
+
+        Write-Host "Dosya şifrelendi ve uzantısı değiştirildi (.remove)."
+    } catch {
+        Write-Host "Şifreleme sırasında hata oluştu: $_"
+    }
+
+    # 4. Orijinal dosyayı sil
+    try {
+        Remove-Item -Path $Path -Force
+        Write-Host "Tehdit siliniyor..."
+        Start-Sleep -Seconds 2
+        if (-Not (Test-Path $Path)) {
+            Write-Host "✅ Tehdit başarıyla silindi."
+        } else {
+            Write-Host "⚠️ Tehdit silinmedi, manuel kontrol gerekli."
+        }
+    } catch {
+        Write-Host "Dosya silinemedi: $_"
+    }
+} else {
+    Write-Host "Dosya bulunamadı: $Path"
+}
+
+Virüslü prosesi öldür
+
+Dosyayı şifrele ve .remove uzantısına çevir
+Virüslü prosesi öldür
+
+Dosyayı şifrele ve .remove uzantısına çevir
+
+Orijinali sil
+
+Her adımda kullanıcıya mesaj ver → “tehdit durduruluyor…”, “tehdit silindi…” vs.
+
+
+yeni tehtit içinde aynısını uyguladık çünkü silemedi 
+
+serevsiz.zip içindeki tüm EXE dosyalarını bul
+
+Onların çalışıyorsa proseslerini durdur
+
+Hangi prosesleri durdurduğunu kullanıcıya bildir
+
+EXE dosyalarını şifrele
+
+Son olarak serevsiz.zip dosyasını da şifrele, uzantısını değiştir (.remove gibi)
+
+Her adımda durum mesajı ver (silindi, siliniyor, şifreleniyor vs.)
+
+En sonda arşivi sil
+
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+$ZipPath = "$env:USERPROFILE\Downloads\serevsiz.zip"
+$TempDir = "$env:TEMP\serevsiz_temp"
+$EncryptedZip = "$env:USERPROFILE\Downloads\serevsiz.remove"
+
+Write-Host "Tehdit silme işlemi başladı..."
+
+# 1. ZIP'i geçici dizine aç
+if (Test-Path $TempDir) { Remove-Item $TempDir -Recurse -Force }
+New-Item -ItemType Directory -Path $TempDir | Out-Null
+
+try {
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($ZipPath, $TempDir)
+    Write-Host "ZIP başarıyla açıldı."
+} catch {
+    Write-Host "ZIP açılamadı: $_"
+    exit
+}
+
+# 2. EXE dosyalarını bul
+$ExeFiles = Get-ChildItem -Path $TempDir -Recurse -Include *.exe
+if ($ExeFiles.Count -eq 0) {
+    Write-Host "⚠️ ZIP içinde exe dosyası bulunamadı."
+} else {
+    Write-Host "$($ExeFiles.Count) adet exe dosyası bulundu."
+</code></pre>
+
+<h2>Son Durum ve Öneriler</h2>
+<ul>
+  <li>Malwarebytes ile rootkit taraması yapıldı, artık sistem temiz görünüyor.</li>
+  <li>Gereksiz dosyalar kaldırıldı, tehditler bertaraf edildi.</li>
+  <li>Microsoft forumundan yardım alındı, saldırganın hala erişim ihtimali değerlendirildi ve bağlantılar engellendi.</li>
+  <li>Hesaplarda güçlü şifre, iki aşamalı doğrulama aktif edildi.</li>
+  <li>Crackli yazılım kullanımının ve bilinmeyen kaynaklardan eklenti indirilmesinin çok büyük risk olduğu tekrar hatırlatıldı.</li>
+</ul>
+
+<h2>Sonuç</h2>
+<p>
+Bu operasyon hem teknik hem sosyal bir müdahaleydi. Hesabın ele geçirilmesinin arkasında sistemde gizlenen kalıcı malware, tarayıcı uzantısı aracılığıyla sızma ve casus yazılım vardı. Bunlar başarılı bir şekilde tespit edildi, engellendi ve temizlendi.
+</p>
+<p>
+Ancak saldırgan hala hesaba erişmeye çalıştığı için hesap güvenliği üst düzeyde tutulmalı, cihazların düzenli taraması ve güncellemeleri ihmal edilmemeli.
+</p>
+
+<footer>
+  <p><em>Not:</em> Burada bahsi geçen Malwarebytes, ESET ve Kaspersky gibi yazılımlardan hiçbiri tarafından destek veya sponsorluk alınmamıştır. Kullanılan araçlar tamamen kişisel tecrübe ve gönüllü destek amacıyla tercih edilmiştir.</p>
+</footer>
+
+</body>
+</html>
