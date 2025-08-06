@@ -4,8 +4,7 @@ Başlangıç Saati: 17:34
 Bitiş Saati: 18:56
 Araştırmacı: Nullsans
 Ekip: KareSecurity
-Web sitemiz: https://kisaca-enes.github.io/
-Taradığımız hedef:http://arsivpatent.com/
+KareSecurity Web sitemiz: https://kisaca-enes.github.io/
 
 1. Giriş
 Amaç: Sistem üzerinde yapılan güvenlik incelemeleri sonucunda, bir Nmap taraması gerçekleştirilmiş ve aşağıdaki açık portlar tespit edilmiştir:
