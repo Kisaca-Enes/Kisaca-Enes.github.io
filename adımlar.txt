@@ -1,0 +1,26 @@
+1. AdwCleaner ile tarama
+Malwarebytes AdwCleaner indir ve çalıştır.
+
+“Scan” başlat, bitince “Clean” yap.
+
+Bulduğu sonuçların ekran görüntüsünü al veya temizlenen dosyaların listesini kaydet.
+
+2. KVRT (Kaspersky Virus Removal Tool) ile tarama
+KVRT indir, bilgisayarı internete bağlı değilken çalıştır (mümkünse).
+
+Tam tarama yap, bitince rapor dosyasını (genelde C:\KVRT202xMMDD_xxx\ veya masaüstünde olur) bul.
+
+Raporu bana yazabilir ya da önemli bulduğu dosya/adları söyleyebilirsin.
+
+3. Emsisoft Emergency Kit ile tarama
+Emsisoft Emergency Kit indir, portable olarak aç.
+
+“Scan” yap, bitince karantinaya alınanlar ya da uyarıları bana yaz.
+
+4. TCPView ile ağ bağlantılarını incele
+TCPView indir, çalıştır.
+
+Şüpheli dış IP’lere giden bağlantıları gözlemle (mesela Türkiye dışında, garip portlarda, sürekli bağlantı açan processler).
+
+Bu bağlantıların ekran görüntüsünü al ya da listele, bana gönder.
+
