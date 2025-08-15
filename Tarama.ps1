@@ -1,14 +1,19 @@
 # Registry yolunu tanımla
 $firewallKey = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Firewall"
 
-# Registry anahtarını oku
+# Registry anahtarının var olup olmadığını kontrol et
 if (Test-Path $firewallKey) {
+
+    # Anahtarı oku
     $values = Get-ItemProperty -Path $firewallKey
 
-    # Her bir değeri anlamlı şekilde yazdır
-    Write-Host "Windows Firewall Politikaları (Sistem Seviyesi):"
+    Write-Host "Windows Firewall Sistem Politikaları:`n"
+
+    # Her bir değeri kontrol et ve anlamlı şekilde yazdır
     foreach ($name in $values.PSObject.Properties.Name) {
-        if ($name -ne "PSPath" -and $name -ne "PSParentPath" -and $name -ne "PSChildName" -and $name -ne "PSDrive" -and $name -ne "PSProvider") {
+
+        # PowerShell’in otomatik eklediği özellikleri atla
+        if ($name -notin "PSPath","PSParentPath","PSChildName","PSDrive","PSProvider") {
             $value = $values.$name
             switch ($name) {
                 "EnableFirewall" {
@@ -33,6 +38,7 @@ if (Test-Path $firewallKey) {
             }
         }
     }
+
 } else {
     Write-Host "Firewall registry anahtarı bulunamadı."
 }
