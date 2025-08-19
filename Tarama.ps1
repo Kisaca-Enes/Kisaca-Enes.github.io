@@ -1,44 +1,37 @@
-# Registry yolunu tanımla
-$firewallKey = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Firewall"
+# Sistem Genel Sorun Tespit Scripti
+# Yönetici olarak çalıştırmanı öneririm.
 
-# Registry anahtarının var olup olmadığını kontrol et
-if (Test-Path $firewallKey) {
+Write-Host "=== Sistem Sağlık Kontrolü Başlıyor ===`n"
 
-    # Anahtarı oku
-    $values = Get-ItemProperty -Path $firewallKey
+# 1. Problemli cihazları listele
+Write-Host "`n[1] Problemli Aygıtlar:" -ForegroundColor Cyan
+pnputil /enum-devices /problem 2>$null
 
-    Write-Host "Windows Firewall Sistem Politikaları:`n"
+# 2. Son 50 sistem hatası (Event Viewer - System log)
+Write-Host "`n[2] Son 50 Sistem Hatası:" -ForegroundColor Cyan
+Get-WinEvent -LogName System -MaxEvents 50 | 
+    Where-Object { $_.LevelDisplayName -eq "Error" } |
+    Select-Object TimeCreated, Id, LevelDisplayName, Message |
+    Format-Table -AutoSize
 
-    # Her bir değeri kontrol et ve anlamlı şekilde yazdır
-    foreach ($name in $values.PSObject.Properties.Name) {
+# 3. Sürücü sorunları
+Write-Host "`n[3] Yüklü Sürücüler (Tarih ve Durum):" -ForegroundColor Cyan
+Get-WmiObject Win32_PnPSignedDriver | 
+    Select-Object DeviceName, DriverVersion, DriverDate, Manufacturer | 
+    Sort-Object DeviceName |
+    Format-Table -AutoSize
 
-        # PowerShell’in otomatik eklediği özellikleri atla
-        if ($name -notin "PSPath","PSParentPath","PSChildName","PSDrive","PSProvider") {
-            $value = $values.$name
-            switch ($name) {
-                "EnableFirewall" {
-                    $status = if ($value -eq 1) { "Açık" } else { "Kapalı" }
-                    Write-Host "$name : $status"
-                }
-                "DoNotAllowExceptions" {
-                    $status = if ($value -eq 1) { "İstisna yapılamaz" } else { "İstisna yapılabilir" }
-                    Write-Host "$name : $status"
-                }
-                "DisableNotifications" {
-                    $status = if ($value -eq 1) { "Uyarılar kapalı" } else { "Uyarılar açık" }
-                    Write-Host "$name : $status"
-                }
-                "LocalPolicyMerge" {
-                    $status = if ($value -eq 1) { "Grup Politikası ile birleştirilir" } else { "Birleştirilmez" }
-                    Write-Host "$name : $status"
-                }
-                default {
-                    Write-Host "$name : $value"
-                }
-            }
-        }
-    }
+# 4. Disk sağlığı
+Write-Host "`n[4] Disk Durumu (SMART):" -ForegroundColor Cyan
+Get-PhysicalDisk | Select-Object FriendlyName, HealthStatus, OperationalStatus, Size | Format-Table -AutoSize
 
+# 5. Sistem dosyası bozukluk taraması (SFC Preview)
+Write-Host "`n[5] Sistem Dosyası Kontrolü:" -ForegroundColor Cyan
+$sfc = sfc /verifyonly
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "SFC: Sistem dosyaları sağlam görünüyor." -ForegroundColor Green
 } else {
-    Write-Host "Firewall registry anahtarı bulunamadı."
+    Write-Host "SFC: Bazı bozukluklar tespit edildi, 'sfc /scannow' çalıştır." -ForegroundColor Red
 }
+
+Write-Host "`n=== Kontrol Tamamlandı ==="
