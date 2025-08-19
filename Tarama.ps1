@@ -1,37 +1,31 @@
-# Sistem Genel Sorun Tespit Scripti
-# Yönetici olarak çalıştırmanı öneririm.
+# ======== Mouse & Touchpad Tarama Scripti ========
 
-Write-Host "=== Sistem Sağlık Kontrolü Başlıyor ===`n"
+# 1️⃣ Mouse ve Touchpad cihazlarını listele
+Write-Host "Tüm Mouse / Touchpad cihazları taranıyor..."
+$devices = Get-PnpDevice -Class Mouse | Select-Object FriendlyName, Status, Manufacturer, InstanceId
 
-# 1. Problemli cihazları listele
-Write-Host "`n[1] Problemli Aygıtlar:" -ForegroundColor Cyan
-pnputil /enum-devices /problem 2>$null
-
-# 2. Son 50 sistem hatası (Event Viewer - System log)
-Write-Host "`n[2] Son 50 Sistem Hatası:" -ForegroundColor Cyan
-Get-WinEvent -LogName System -MaxEvents 50 | 
-    Where-Object { $_.LevelDisplayName -eq "Error" } |
-    Select-Object TimeCreated, Id, LevelDisplayName, Message |
-    Format-Table -AutoSize
-
-# 3. Sürücü sorunları
-Write-Host "`n[3] Yüklü Sürücüler (Tarih ve Durum):" -ForegroundColor Cyan
-Get-WmiObject Win32_PnPSignedDriver | 
-    Select-Object DeviceName, DriverVersion, DriverDate, Manufacturer | 
-    Sort-Object DeviceName |
-    Format-Table -AutoSize
-
-# 4. Disk sağlığı
-Write-Host "`n[4] Disk Durumu (SMART):" -ForegroundColor Cyan
-Get-PhysicalDisk | Select-Object FriendlyName, HealthStatus, OperationalStatus, Size | Format-Table -AutoSize
-
-# 5. Sistem dosyası bozukluk taraması (SFC Preview)
-Write-Host "`n[5] Sistem Dosyası Kontrolü:" -ForegroundColor Cyan
-$sfc = sfc /verifyonly
-if ($LASTEXITCODE -eq 0) {
-    Write-Host "SFC: Sistem dosyaları sağlam görünüyor." -ForegroundColor Green
-} else {
-    Write-Host "SFC: Bazı bozukluklar tespit edildi, 'sfc /scannow' çalıştır." -ForegroundColor Red
+# 2️⃣ Rapor oluştur
+$report = @()
+foreach ($dev in $devices) {
+    $status = if ($dev.Status -eq "OK") { "Sağlıklı" } else { "Sorunlu" }
+    $reportObj = [PSCustomObject]@{
+        CihazAdı     = $dev.FriendlyName
+        Üretici      = $dev.Manufacturer
+        DeviceID     = $dev.InstanceId
+        Durum        = $status
+        Zaman        = Get-Date
+    }
+    $report += $reportObj
 }
 
-Write-Host "`n=== Kontrol Tamamlandı ==="
+# 3️⃣ Raporu ekrana yazdır
+Write-Host "`n========== TARAMA RAPORU =========="
+$report | Format-Table -AutoSize
+
+# 4️⃣ Opsiyonel: raporu dosyaya kaydet
+$logPath = "$env:USERPROFILE\Desktop\Mouse_Touchpad_Rapor.txt"
+$report | Out-File -FilePath $logPath -Encoding UTF8
+Write-Host "`nRapor kaydedildi: $logPath"
+
+# 5️⃣ Özet mesaj
+Write-Host "`nTarama tamamlandı. Cihazların durumu yukarıda listelendi."
