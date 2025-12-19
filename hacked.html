@@ -1,94 +1,72 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>HACKED</title>
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background: #000;
-    color: #0f0;
-    font-family: 'Courier New', monospace;
-    overflow: hidden;
-    cursor: none;
-  }
-  .container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-  }
-  h1 {
-    font-size: 90px;
-    margin: 0;
-    text-shadow: 0 0 20px #0f0;
-    animation: blink 1s infinite;
-  }
-  .pumopkimn {
-    font-size: 140px;
-    color: #ff0044;
-    text-shadow: 0 0 30px #ff0044;
-    margin: 20px 0;
-    animation: pulse 2s infinite;
-  }
-  p {
-    font-size: 35px;
-    margin: 15px 0;
-  }
-  .locked {
-    font-size: 60px;
-    color: #ff0000;
-    animation: shake 0.5s infinite;
-  }
-  .skull {
-    font-size: 200px;
-    margin: 30px 0;
-    animation: rotate 10s infinite linear;
-  }
-  @keyframes blink {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
-  @keyframes shake {
-    0% { transform: translate(0,0); }
-    25% { transform: translate(-10px,0); }
-    50% { transform: translate(10px,0); }
-    75% { transform: translate(-10px,0); }
-    100% { transform: translate(0,0); }
-  }
-  @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-</style>
-</head>
-<body ondblclick="return false;" oncontextmenu="return false;">
-  <div class="container">
-    <div class="skull">💀</div>
-    <h1>YOU ARE HACKED</h1>
-    <div class="pumopkimn">white pumopkimn</div>
-    <p class="locked">YOUR SYSTEM IS LOCKED BY ME</p>
-    <p>Şifre için 500 TL gönder → Papara: 0555 123 45 67</p>
-    <p>Parayı göndermezsen her şeyi silerim… 5… 4… 3…</p>
-  </div>
+  <meta charset="UTF-8">
+  <title>DustWare - Your Files Are Locked</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: 0 20px;
+      margin: 0;
+    }
 
-  <script>
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'F5' || e.key === 'Escape') {
-        e.preventDefault();
-      }
-    });
-    setInterval(() => {
-      document.title = document.title === "HACKED" ? "white pumopkimn WAS HERE" : "HACKED";
-    }, 500);
-  </script>
+    h1 {
+      color: red;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px red;
+    }
+
+    p {
+      font-size: 1.2em;
+      max-width: 800px;
+      line-height: 1.6em;
+    }
+
+    .important {
+      color: yellow;
+      font-weight: bold;
+    }
+
+    img {
+      width: 200px;
+      margin: 30px 0;
+      filter: drop-shadow(0 0 10px red);
+    }
+
+    .btc {
+      background-color: #222;
+      padding: 10px;
+      border: 1px dashed red;
+      display: inline-block;
+      font-size: 1.1em;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Your Files Have Been Encrypted!</h1>
+
+  <p>All your important files have been locked by <span class="important">DustWare</span>.<br>
+     To restore them, you must pay <span class="important">0.05 BTC</span> to the address below.</p>
+
+  <div class="btc">1A2b3C4d5E6f7G8h9i0JdustWallet</div>
+
+  <p>After payment, contact us at: <span class="important">dust@protonmail.com</span><br>
+     Do NOT try to decrypt or rename files, or they may be permanently damaged.</p>
+
+  <img src="https://raw.githubusercontent.com/Kisaca-Enes/Exploit/main/F0AD04SaIAAa0FG.jpeg" alt="Dust Symbol" />
+
+  <p><i>This is not a joke. Time is running out.</i></p>
+
 </body>
 </html>
