@@ -1,0 +1,415 @@
+
+
+Arka mantığı anlamadan diğer tüm argümanlar benim için “ezber” denilen kalıp altında toplanmış, zaman kazandırmak dışında pek işe yaramayan gereksiz argümanlardır. Bu yüzden Linux’ta önce arka plan mantığını anlatmak isteyen birisiyimdir.
+
+Linux’ta arka planı anlatırken çok fazla “dosya, dosya, dosya” duyabiliriz. Bunun nedenini ileriki yazılarda anlatacağım.
+Burada anlatmak istediğim şey; **shell mantığının kernel üzerinde nasıl işlediği, PATH vb.** olacak. Temelden nereden başlayacağımı bilmiyorum çünkü Linux zafif değil, derindir; temelden başlarsak karışabilir. Bu yüzden **en temelden başlayacağım ama en temel haliyle, özet bir anlatım olacak.**
+
+---
+
+Aslında her şey UNIX’in gelişmesiyle başlamıştır.
+
+UNIX, 1970’lerde geliştirilmiş bir sistem ailesidir.
+
+* Çok kullanışlıdır
+* Çok görevlidir
+* Metin tabanlı bir felsefeye sahiptir
+* “Her şey bir dosyadır” mantığını ilk kuran sistemdir
+
+Günümüze geldiğimizde lisanslı ve ücretlidir. Tabii bir yerde bu durum değişecekti.
+
+---
+
+Bundan sonra Linux gelir.
+
+Linux, 1991’de Linus Torvalds tarafından yazılan bir **çekirdektir (kernel)**.
+Donanım ile programlar arasındaki katmandır.
+Aslında Linux tek başına bir işletim sistemi değildir; işletim sistemi özelliklerini **tek başına göstermez**.
+
+---
+
+Bundan sonra asıl üçlüden ortaya başka bir şey çıkar: **GNU**
+
+GNU, Richard Stallman’ın başlattığı özgür yazılım projesidir. O zamanlar her şey kısıtlı, her şey kapalı kaynak bir dönemdir.
+Richard Stallman özgür yazılım (free software) felsefesini bu dönemde ortaya koymuştur.
+
+Hatta olay şöyle yaşanmıştır (renklendirilmiş haliyle):
+
+> “Yoldaşlar! Yazılımlarımın ağzına sıçıyorlar! Bugün saat 20:00’da parlamento binasını—”
+
+Tamam, bu biraz abartı ama ruhu buydu. Elinde böyle bir güç yoktu tabii. Derken ikinci bir yoldaş gelir:
+
+> “Al kernel yoldaşım!”
+
+Ama GNU’nun normalde bir kernel’i yoktu. Araç seti gibi düşünün.
+
+GNU şunları yaptı:
+
+* gcc
+* bash
+* coreutils (ls, cp, cat)
+* glibc
+
+Ama:
+
+* ❌ Çekirdeği (kernel) eksikti
+
+Sonra **Linux + GNU** birleşti ve tam bir şey elde edildi (Selena mantığı).
+Bu yüzden bugün kullandıklarımıza doğrudan “Linux” demek teknik olarak doğru değildir; doğrusu **GNU/Linux**’tur.
+Ama herkes Linux der. Neden?
+👉 Üşengeçlik.
+
+Özet tablo:
+
+* UNIX → Orijinal sistem ailesi
+* Linux → Çekirdek
+* GNU → Kullanıcı alanı araçları
+* Ubuntu / Fedora → Dağıtım
+
+Bunu kafanıza yeterince oturttuğunuzu varsayıyorum.
+
+---
+
+Şimdi benim gelmek istediğim nokta: **Terminal**
+
+### TERMINAL
+
+Terminal; komutları yazdığımız ve bunların shell aracılığıyla çalıştırılıp çıktısının bize gösterildiği bir **komut arayüzüdür**.
+Herkesin terminali neredeyse aynıdır (konfigüre edip kaplan falan ekleyip şekil şukul yapmadıysanız).
+
+Yani terminali;
+**komutları yazıp çıktıyı okuyabildiğimiz bir arayüz** gibi düşünebilirsiniz.
+
+---
+
+### SHELL
+
+Shell’in görevi, komut arayüzünden gelen argümanları almaktır.
+Aslında **her şey bir argümandır**.
+
+Örneğin şu cümleye bakalım:
+
+> “her şey bir argümandır”
+
+Bunu parçalara ayıralım:
+
+* her şey → argv[0]
+* bir → argv[1]
+* argümandır → argv[2]
+
+Shell bunları ayırır.
+
+Şimdi terminalinize şunu yazın:
+
+```
+ls -l /home
+```
+
+Shell ne yapar?
+
+a) Satırı parse eder
+b) Boşluklara göre ayırır
+
+* Komut: `ls`
+* Argüman 1: `-l`
+* Argüman 2: `/home`
+
+Program tarafında bu şöyle görünür:
+
+* argv[0] = ls
+* argv[1] = -l
+* argv[2] = /home
+
+`ls` programı:
+
+* Argümanları alır
+* Ona göre davranır
+* Çıktıyı terminale gönderir
+
+---
+
+Ama bazen bu işler böyle olmaz.
+
+Mesela:
+ls zaten var ama Linux’ta **python otomatik var mı?**
+
+Sizce neden Debian’da:
+
+```
+sudo apt install python
+```
+
+yapıyoruz abicim?
+
+Çünkü yok. İndirdik.
+
+Ama sonra terminale sadece `python` yazıyoruz ve çalışıyor.
+Veri tabanında mı var? Hayır.
+
+Linux burada şunu der:
+
+> “Yeni gelen araçları PATH ile bulacağım.”
+
+---
+
+### PATH
+
+PATH bir **ortam değişkenidir**.
+Shell bir komut aldığında, çalıştırılabilir dosyanın **nerede olduğunu bulmak için** PATH’e bakar.
+
+Görmek için:
+
+```
+echo $PATH
+```
+
+Örnek çıktı:
+
+```
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+```
+
+İki nokta (`:`) ayırıcıdır.
+
+Shell soldan sağa gider:
+
+* Önce `/usr/local/bin`
+* Bulamazsa `/usr/bin`
+* Sonra `/bin`
+
+İlk bulduğu çalıştırılır.
+
+PATH’e dizin eklenebilir. Yazılım indirince terminalden çağırabilmemizin nedeni budur.
+Ama bu **tehlikelidir**.
+
+Bir hacker PATH manipülasyonu ile yetki yükseltebilir.
+Bir ay önce yaptığım salaklığı siz yapmayın.
+
+---
+
+### Betik (Script)
+
+Betik, içinde kabuk komutları bulunan metin dosyasıdır.
+Program gibi çalıştırılabilir.
+
+Örnek:
+
+```
+echo "Program Çalıştı!"
+```
+
+---
+
+### cat > betik.sh
+
+Bu komut:
+
+* `cat` → girdiyi alır
+* `>` → dosyaya yönlendirir
+* `betik.sh` → hedef dosya
+
+Ctrl+D ile biter.
+
+---
+
+### Konfigürasyon Dosyaları
+
+Bash başlarken bazı dosyaları otomatik okur.
+
+Amaç:
+
+* Ortam değişkenleri (PATH)
+* Alias’lar
+* Kabuk ayarları
+
+#### Sistem Geneli
+
+* /etc/profile
+* /etc/bashrc
+* /etc/bash.bashrc
+
+Root gerekir.
+
+#### Kullanıcı Bazlı
+
+* ~/.bashrc
+* ~/.bash_profile
+* ~/.profile
+
+Sadece o kullanıcıyı etkiler.
+
+Çok dosya olmasının nedeni:
+Login shell / non-login shell farkları.
+
+Eğitim seviyesinde bilmek yeterli:
+Hangisi varsa onu kullan.
+
+---
+
+
+
+### USER MODE – KERNEL MODE
+
+Linux’ta gördüğümüz komut arayüzü, çalıştırdığımız programlar, shell, coreutils vb. **tamamı user mode’da çalışır**.
+Yani aslında `ls`, `cat`, `bash`, `python` dediğimiz her şey **user space** içindedir.
+
+Ama bu programların **işlev kazanmasını sağlayan**, onları anlamlı kılan şey **kernel**’dir.
+
+Kernel;
+
+* Dosya açma
+* Bellek yönetimi
+* Süreç (process) yönetimi
+* Donanım ile iletişim
+* Klavye, disk, ekran gibi I/O işlemleri
+
+gibi her şeyi kontrol eder.
+
+Yani user mode’daki bir program **tek başına hiçbir şey yapamaz**.
+Her ciddi iş için kernel’e gitmek zorundadır.
+
+---
+
+Şimdi ilişkiyi net kuralım:
+
+```
+USER MODE  <---->  KERNEL MODE
+```
+
+User mode:
+
+* Kısıtlıdır
+* Donanıma doğrudan erişemez
+* Güvenlidir
+
+Kernel mode (Ring 0):
+
+* Tam yetkilidir
+* Donanıma direkt erişir
+* Sistemin kalbidir
+
+---
+
+Şimdi somut örnekle gidelim.
+
+Terminale şunu yazdın:
+
+```
+ls -l /home
+```
+
+Bu ne oldu?
+
+1️⃣ Komut terminalden shell’e gider
+Shell bunu alır, **argüman argüman ayırır**
+
+2️⃣ `ls` builtin mı diye bakar → ❌
+3️⃣ PATH’te çalıştırılabilir dosyayı bulur → `/bin/ls`
+
+Bu aşamaya kadar **her şey user mode’da**.
+Henüz kernel’e gidilmedi.
+
+---
+
+4️⃣ Bundan sonra shell şunu yapmak zorundadır:
+
+> “Bu programı çalıştır”
+
+Bunu kendi başına yapamaz.
+Kernel’e **bir sistem çağrısı (syscall)** gönderir.
+
+Burada kritik nokta şudur:
+
+🔥 `execve()` çağrılır
+
+Bu aslında şunu demektir:
+
+> “Mevcut process’i bu programla değiştir”
+
+Yani:
+
+* Yeni process yaratılmaz
+* Bash process’i **ls ile değiştirilir**
+* Bellek temizlenir
+* `/bin/ls` yüklenir
+
+Bu tamamen **kernel mode** işidir.
+
+---
+
+5️⃣ Kernel bu çağrıyı alır
+
+Kernel tarafında:
+
+* Syscall tablosuna bakılır
+* `execve` → ilgili kernel fonksiyonuna eşlenir
+* Gerekli `struct` yapıları kullanılır
+* Dosya sistemi üzerinden binary okunur
+* Belleğe map edilir
+
+---
+
+6️⃣ ls çalışırken:
+
+* `/home` dizinini okumak ister
+* Dosya bilgilerini almak ister
+
+Bunların hepsi tekrar tekrar **syscall** demektir:
+
+* `open()`
+* `getdents()`
+* `stat()`
+* `write()`
+
+Ama ls bu çağrıları **doğrudan donanıma yapmaz**.
+Her seferinde kernel’e gider.
+
+---
+
+7️⃣ Kernel çıktıyı üretir ama şuna dikkat eder:
+
+> User mode belleğine **güvenli** şekilde yazmak zorundadır
+
+Bunun için:
+
+* `copy_to_user()`
+  kullanılır.
+
+Yani kernel, user mode belleğine kafasına göre dokunmaz.
+
+---
+
+Sonuçta akış şudur:
+
+```
+Komut Arayüzü
+   ↓
+Shell
+   ↓
+PATH kontrolü
+   ↓
+execve()  ← syscall
+   ↓
+Kernel (Ring 0)
+   ↓
+Donanım / FS / Bellek
+   ↓
+copy_to_user()
+   ↓
+Shell
+   ↓
+Terminal (çıktı)
+```
+
+---
+
+Özetle:
+
+* **User mode**: programların yaşadığı güvenli alan
+* **Kernel mode**: her şeyin gerçekten yapıldığı yer
+* Aralarındaki tek köprü: **syscall**’lar
+
+Bu yüzden Linux’ta “her şey dosyadır” lafı kadar,
+**“her şey kernel’den geçer”** lafı da doğrudur.
+
+
