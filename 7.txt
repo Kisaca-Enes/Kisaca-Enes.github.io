@@ -1,0 +1,243 @@
+
+
+# Linux Kullanıcı ve Grup Yönetimi
+
+## 1. Çok Kullanıcılı Sistem
+
+* Linux, **çok kullanıcılı bir işletim sistemidir**.
+* Her kullanıcının bir **home dizini** vardır: `/home/kullanıcıadı`
+* Kullanıcılar **UID (User ID)**, gruplar ise **GID (Group ID)** ile tanımlanır.
+* Gruplar birden fazla kullanıcıya aynı izinleri vermeyi kolaylaştırır.
+
+### Süper Kullanıcı (root)
+
+* `root`: Tüm yetkilere sahip süper kullanıcıdır.
+* Sürekli root olmak **tehlikeli** olabilir.
+* Tek seferlik yetki için `sudo` kullanılır.
+* `su` komutu ile root yetkisine geçilebilir, şifre ister.
+
+---
+
+## 2. Önemli Dosyalar
+
+### `/etc/passwd`
+
+* Kullanıcı adları ve UID’leri eşleştiren temel dosya
+* Her satır bir kullanıcıyı temsil eder:
+
+```text
+root:x:0:root:/root:/bin/bash
+```
+
+Alanlar:
+
+1. Kullanıcı adı
+2. Parola alanı (x → `/etc/shadow` kullanılıyor)
+3. UID
+4. GID
+5. GECOS (kullanıcı bilgisi)
+6. Home dizini
+7. Varsayılan shell
+
+### `/etc/shadow`
+
+* Şifrelenmiş parolaların ve politika bilgilerin tutulduğu kritik dosya
+* **Sadece root** tarafından okunabilir
+
+Alanlar:
+
+1. Kullanıcı adı
+2. Şifrelenmiş parola
+3. `!` veya `*` → hesap kilitli
+4. Son parola değişim tarihi (01.01.1970’den itibaren gün sayısı)
+5. Minimum parola yaşı
+6. Maksimum parola yaşı
+7. Parola uyarı süresi
+8. Parola süresi dolunca hesap kilitlenme süresi
+9. Hesap son kullanma tarihi
+
+### `/etc/group`
+
+* Sistemdeki gruplar ve üyeleri
+* Her satır bir grubu temsil eder:
+
+```text
+root:*:0:pete
+```
+
+Alanlar:
+
+1. Grup adı
+2. Grup parolası (`*` veya `x`, genelde kullanılmaz)
+3. GID
+4. Grup üyeleri (virgülle ayrılır)
+
+---
+
+## 3. Kullanıcı Yönetimi
+
+* **Yeni kullanıcı ekleme:**
+
+```bash
+sudo useradd bob
+```
+
+* **Kullanıcı silme:**
+
+```bash
+sudo userdel bob
+```
+
+* **Parola değiştirme:**
+
+```bash
+passwd bob
+```
+
+---
+
+## 4. Dosya ve Dizin İzinleri
+
+* Linux'ta **her şey bir dosyadır** felsefesi ile izinler belirlenir.
+* `ls -l` ile izinleri görebilirsiniz.
+
+### İzin Türleri
+
+| İzin | Dosya          | Dizin             |
+| ---- | -------------- | ----------------- |
+| r    | Oku            | —                 |
+| w    | Yaz            | —                 |
+| x    | Çalıştır / Gir | Dizin içine girme |
+| -    | Yok            | Yok               |
+
+---
+
+## 5. `chmod` ile İzin Değiştirme
+
+### 1. Symbolic Mode (Harfli)
+
+* Format: `Kim + Ne yapılacak + Hangi izin`
+
+| Harf | Anlam               |
+| ---- | ------------------- |
+| u    | User (dosya sahibi) |
+| g    | Group               |
+| o    | Others              |
+| a    | All (u+g+o)         |
+
+| İşlem | Anlam       |
+| ----- | ----------- |
+| +     | İzin ekle   |
+| -     | İzin kaldır |
+
+Örnekler:
+
+```bash
+chmod u-x myfile      # Kullanıcının çalıştırma iznini kaldır
+chmod g-w myfile      # Grup için yazma iznini kaldır
+chmod ug+w myfile     # Kullanıcı ve gruba yazma izni ver
+```
+
+### 2. Numerical (Octal) Mode
+
+| Sayı | İzin |
+| ---- | ---- |
+| 4    | r    |
+| 2    | w    |
+| 1    | x    |
+
+Toplam değerler:
+
+| Değer | Anlam |
+| ----- | ----- |
+| 7     | rwx   |
+| 6     | rw-   |
+| 5     | r-x   |
+| 4     | r--   |
+
+---
+
+## 6. Sahiplik Değiştirme
+
+* **Kullanıcı sahipliği:**
+
+```bash
+sudo chown patty myfile
+```
+
+* **Grup sahipliği:**
+
+```bash
+sudo chgrp whales myfile
+```
+
+* **Hem kullanıcı hem grup:**
+
+```bash
+sudo chown patty:whales myfile
+```
+
+---
+
+## 7. Umask
+
+* Umask, **yeni dosya ve dizinler için varsayılan izinleri** belirler.
+* Sayısal mantık: `r=4, w=2, x=1`
+
+```bash
+umask 021
+# user = 0, group = 2, others = 1
+```
+
+* Umask kalıcı değildir; terminal kapandığında kaybolur.
+
+---
+
+## 8. Özel İzinler
+
+### 1. SUID
+
+* Program, çalıştıran kullanıcı yerine **dosya sahibinin yetkileriyle çalışır**
+* Örnek: `/usr/bin/passwd` → root yetkisiyle çalışır
+
+```bash
+ls -l /usr/bin/passwd
+-rwsr-xr-x 1 root root ...
+```
+
+### 2. SGID
+
+* Program çalıştırıldığında **dosya grubunun yetkileriyle çalışır**
+
+```bash
+sudo chmod g+s myfile
+ls -l /usr/bin/wall
+-rwxr-sr-x 1 root tty 19024 ...
+```
+
+### 3. Sticky Bit
+
+* Klasörlerde kullanılır
+* **Sadece sahip veya root** dosya silebilir veya taşıyabilir
+
+```bash
+chmod +t directory
+```
+
+---
+
+## 9. Process İzinleri
+
+* Linux’ta her processin üç UID’si vardır:
+
+| UID Tipi             | Açıklama                             |
+| -------------------- | ------------------------------------ |
+| Real UID (RUID)      | Komutu çalıştıran kişinin UID’si     |
+| Effective UID (EUID) | Process hangi yetkilerle çalışıyor   |
+| Saved UID (SUID)     | Geçici UID değişimlerinde kullanılır |
+
+* Örnek: `passwd` komutu root yetkisi ile çalışır → **EUID = 0**
+
+---
+
+
