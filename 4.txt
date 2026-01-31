@@ -1,0 +1,95 @@
+
+## Linux Tarihi
+
+* Linux'un kökleri **UNIX**’e dayanır. 1969'da Ken Thompson ve Dennis Ritchie tarafından geliştirilmiştir.
+* **GNU Projesi**, Richard Stallman tarafından başlatılmıştır. Hedefi UNIX benzeri, tamamen özgür bir işletim sistemi yaratmaktı.
+* **Kernel (çekirdek)**: Donanım ile yazılım arasındaki köprüdür; sistem kaynaklarını yönetir.
+* 1991'de Linus Torvalds, GNU sistemine uygun bir kernel geliştirdi.
+* **GNU araçları + Linux çekirdeği = günümüz Linux’u.**
+
+---
+
+## Linux Dağıtımı Seçmek
+
+* Linux denildiğinde yalnızca kernel kastedilir; tüm işletim sistemi için **Linux dağıtımları (distrolar)** kullanılır.
+* Bir Linux sistemi üç ana bölümden oluşur:
+
+  1. Donanım
+  2. Linux Kernel
+  3. Kullanıcı Alanı (User Space)
+* Linux dağıtımı, kernel + yazılım + paket yöneticisi + masaüstü ortamı içerir.
+
+### Dağıtım Seçerken Dikkat Edilecek Noktalar
+
+* **Deneyim Seviyesi**
+* **Amaçlar / Kullanım Alanı**
+* **Masaüstü Ortamı**
+* **Paket Yönetimi**
+* **Topluluk ve Destek**
+
+---
+
+## Debian
+
+* Debian, tamamen özgür ve açık kaynak yazılımlardan oluşur; uzun bir geçmişi vardır.
+* **Sürümler / Branches**:
+
+  * **Stable**: Kararlı yapı, az güncelleme, sunucular için ideal.
+  * **Testing**: Kararlı değil; bir sonraki Stable sürüm için test edilen paketler içerir.
+  * **Unstable (Sid)**: En güncel paketler; hata riski yüksek.
+* Paket yönetimi: **APT** kullanılır; `.deb` paket formatı.
+
+---
+
+## Red Hat Enterprise Linux (RHEL)
+
+* Kurumsal odaklı, uzun süreli destek sunan Linux dağıtımı.
+* Paket yönetimi: **RPM** formatı.
+* Yönetim araçları: **YUM** ve güncel sürümlerde **DNF**.
+* Avantajlar: Kritik sistemler için tasarlanmış, 10 yıl destek sağlar.
+* Fedora: RHEL’in upstream (öncü) dağıtımıdır; yeni özellikler önce Fedora’da test edilir.
+
+---
+
+## Ubuntu
+
+* Debian tabanlı, Canonical tarafından geliştirilen kullanıcı dostu dağıtım.
+* Büyük topluluk desteği ve modern arayüze sahiptir.
+* Paket yönetimi: APT ve `.deb` paketleri.
+* Masaüstü ortamı: **GNOME**.
+
+---
+
+## Fedora
+
+* Red Hat tarafından desteklenen, topluluk odaklı ve açık kaynak bir dağıtımdır.
+* RHEL’in upstream kaynağıdır; yeni özellikler önce Fedora’da test edilir.
+* Paket yönetimi: **DNF** ve **RPM** formatı.
+
+---
+
+## Linux Mint
+
+* Kullanıcı dostu ve şık bir masaüstü deneyimi sunar.
+* Ubuntu tabanlıdır; LTS sürümlerini kullanır.
+* Paket yönetimi: APT ve `.deb` paketleri.
+* Masaüstü ortamı: Cinnamon, Mate veya XFCE.
+* Özellikleri: Media codec önceden yüklenmiş, kolay kullanım.
+
+---
+
+## Gentoo
+
+* Gelişmiş kullanıcılar için maksimum kontrol ve özelleştirme sunan kaynak tabanlı dağıtım.
+* Paket yönetimi: **Portage**.
+* Yazılım kaynak kodundan derlenir; **USE flag**’leri ile sistem ihtiyaçlarına göre optimize edilir.
+
+---
+
+## Arch Linux
+
+* Hafif, esnek ve kullanıcı merkezli dağıtım.
+* **Rolling-release** modeli ile sürekli güncellenir.
+* Felsefe: Basit, modern ve kullanıcı merkezli.
+* Paket yönetimi: **Pacman**; yazılım kurulumu ve güncellemeleri kolaylaştırır.
+
