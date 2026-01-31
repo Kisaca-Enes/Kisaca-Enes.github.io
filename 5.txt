@@ -1,0 +1,182 @@
+
+# Linux Süreçleri (Processes)
+
+Linux’ta çalışan her program **bir süreç (process)** olarak yönetilir.
+
+Her sürecin kendine ait bir **PID (Process ID)** vardır.
+
+---
+
+## 1. Temel Komut: `ps`
+
+`ps` komutu mevcut süreçleri ve detaylarını gösterir:
+
+```text
+PID     TTY     STAT    TIME      CMD
+41230   pts/4   Ss      00:00:00  bash
+51224   pts/4   R+      00:00:00  ps
+```
+
+* **PID:** Süreç numarası
+* **TTY:** Terminal
+* **STAT:** Durum
+* **TIME:** CPU kullanımı
+* **CMD:** Çalıştırılan komut
+
+**BSD stil seçenekler:**
+
+```bash
+ps aux
+```
+
+* `a` → Tüm kullanıcıların süreçleri
+* `u` → Kullanıcı odaklı detaylı liste
+* `x` → Terminale bağlı olmayan süreçler
+
+Çıktıda ek bilgiler: USER, %CPU, %MEM, VSZ, RSS
+
+---
+
+## 2. Terminal (TTY)
+
+* **TTY = Teletype**: Fiziksel veya sanal terminal cihazını ifade eder.
+* Linux’ta süreçler standart giriş/çıkışlarını TTY üzerinden alır.
+* Gerçek terminal örnekleri: Konsol veya sanal terminal (`Ctrl+Alt+F1 → tty1`)
+
+---
+
+## 3. Süreç Detayları
+
+* Süreç, çalışan bir program örneğidir.
+* Sistem tarafından **bellek, CPU zamanı, I/O gibi kaynaklar** tahsis edilir.
+* Örnek: Aynı anda iki terminalde `cat` çalıştırırsanız, iki farklı süreç oluşur.
+
+---
+
+## 4. Kernel ve Süreç Yönetimi
+
+* Linux **kernel**, süreçleri yönetir:
+
+  * Kod ve belleği yükler
+  * Gereken sistem kaynaklarını tahsis eder
+  * Süreci izlemeye başlar
+
+---
+
+## 5. Süreç Oluşumu: fork() ve exec()
+
+* Linux’ta yeni süreç **mevcut bir süreçten kopyalanarak** başlatılır.
+
+1. **fork()** → Mevcut süreç kopyalanır, yeni süreç child olur, kendi PID’si vardır.
+2. **execve()** → Child süreç genellikle yeni bir program çalıştırmak için memory space’ini değiştirir.
+
+* Uzun formatta görmek için:
+
+```bash
+ps -l
+```
+
+---
+
+## 6. Süreç Sonlandırma
+
+* Bir süreç **exit sistem çağrısı** ile sonlanır.
+* Parent process ölürse, child process **yetim** kalır.
+* Eğer parent `wait()` çağırmazsa süreç **zombie** olur.
+
+---
+
+## 7. Sinyaller (Signals)
+
+* Linux’ta **sinyal**, bir sürece gönderilen yazılım kesmesidir.
+* Sürece önemli bir olayın meydana geldiğini bildirir.
+* Sinyaller süreç davranışını değiştirebilir (dur, kes, devam, vb.)
+
+### Sinyal Yaşam Döngüsü
+
+1. Olay sinyal oluşturur
+2. Hedef sürece gönderilir
+3. Sinyal CPU’ya geldiğinde işlenir
+
+| Sinyal  | Kod | Anlamı                                        |
+| ------- | --- | --------------------------------------------- |
+| SIGHUP  | 1   | Hangup, genellikle daemon config reload       |
+| SIGINT  | 2   | Ctrl-C, süreci kes                            |
+| SIGKILL | 9   | Hemen öldür, yakalanamaz veya bloklanamaz     |
+| SIGSEGV | 11  | Segmentation Fault, hatalı bellek erişimi     |
+| SIGTERM | 15  | Nazik terminate, yakalanabilir (kill default) |
+| SIGSTOP | -   | Süreci durdur, yakalanamaz veya bloklanamaz   |
+
+---
+
+### Kill ile Süreç Sonlandırma
+
+```bash
+kill PID         # SIGTERM gönderir
+kill -9 PID      # SIGKILL ile zorla kapatma
+```
+
+---
+
+## 8. Niceness ve CPU Önceliği
+
+* CPU, aynı anda birden çok uygulamanın çalışıyormuş gibi görünmesini sağlar.
+* Gerçekte CPU zaman dilimlerini (time slice) hızlıca değiştirir.
+* Linux kernel scheduler, süreçleri **round-robin** ile yönetir.
+
+| Niceness | Öncelik    | Anlam                                      |
+| -------- | ---------- | ------------------------------------------ |
+| -20      | Çok yüksek | CPU zamanını daha fazla alır               |
+| 0        | Normal     | Standart öncelik                           |
+| 19       | Çok düşük  | Diğer süreçlere CPU verir, daha az öncelik |
+
+---
+
+## 9. Süreç Durumları (Process States)
+
+| Kod | Açıklama                                                                 |
+| --- | ------------------------------------------------------------------------ |
+| R   | Running veya Runnable: CPU üzerinde aktif çalışan veya hazır süreç       |
+| S   | Interruptible Sleep: Sinyal ile uyandırılabilir, genellikle I/O bekler   |
+| D   | Uninterruptible Sleep: Sinyal ile durdurulamaz, I/O sırasında kullanılır |
+| Z   | Zombie: Süreç bitmiş ama parent’ın exit durumunu bekliyor                |
+| T   | Stopped: Ctrl-Z ile durdurulmuş veya debugger tarafından izlenen süreç   |
+
+---
+
+## 10. `/proc` Dosya Sistemi
+
+* Linux’ta her şey bir dosya olarak görülür, süreç bilgileri de `/proc`’ta tutulur.
+* `/proc` gerçek disk alanı değildir, **kernel tarafından dinamik oluşturulur**.
+
+```bash
+cat /proc/12345/status
+```
+
+* Süreç hakkında detaylı bilgi verir
+
+---
+
+## 11. Job ve İş Kontrolü
+
+* Terminal kilitlenmeden arka planda işlemler çalıştırmak için kullanılır.
+
+### Arka Planda Komut Çalıştırma
+
+```bash
+sleep 1000 &
+```
+
+### Arka Plan İşlerini Listeleme
+
+```bash
+jobs
+```
+
+### Ön Planda Çalışan Komutu Arka Plana Göndermek
+
+1. Ctrl-Z → durdur
+2. `bg` → arka plana al
+
+---
+
