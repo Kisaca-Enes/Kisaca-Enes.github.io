@@ -1,0 +1,159 @@
+Regex ve Metin Editörleri
+Regex (Regular Expressions)
+
+Regex, metin içinde desenli arama ve seçim yapmak için kullanılan güçlü bir araçtır.
+
+Linux ve diğer programlama dillerinde yaygın olarak kullanılır.
+
+Temel Regex Kullanımı
+İşaret	Anlam
+^	Satır başı ile eşleşme
+$	Satır sonu ile eşleşme
+.	Herhangi bir karakter ile eşleşme
+[]	Karakter seti, köşeli parantez içindeki herhangi bir karakterle eşleşir
+
+Örnekler:
+
+^by → satır başında "by" ile eşleşir
+
+seashore$ → satır sonunda "seashore" ile eşleşir
+
+b. → “b” ile başlayan ve herhangi bir karakterle devam eden metin
+
+s[ae]lls → "salls" veya "sells" ile eşleşir
+
+Text Editors (Metin Editörleri)
+
+Linux’ta güçlü iki editör yaygındır: Emacs ve Vim.
+
+1. Emacs
+
+Çok güçlü ve genişletilebilir bir editördür.
+
+Hem metin editörü hem de bir çalışma ortamı olarak kullanılabilir.
+
+Terminalde veya GUI üzerinden çalışabilir.
+
+Avantajları:
+
+Çok yönlü
+
+Her şeyi yapabilir, güçlü eklenti desteği
+
+Dezavantajları:
+
+Daha ağır
+
+Öğrenme eğrisi dik
+
+Temel Komutlar:
+
+C-x C-s → Açık dosyayı kaydet
+
+C-x C-w → Dosyayı farklı kaydet
+
+C-x s → Tüm açık dosyaları kaydet
+
+C-x C-f → Yeni dosya aç veya dosya oluştur
+
+Buffer Yönetimi:
+
+Buffer: Düzenlenen metin veya dosya alanı
+
+C-x b → Başka buffer’a geçiş
+
+C-x ← → Önceki buffer’a geçiş
+
+C-x 2 → Mevcut pencereyi dikey bölerek iki pencere aç
+
+C-x 0 → Diğer pencereyi kapat
+
+C-x 1 → Diğer tüm pencereleri kapat
+
+C-x k → Buffer’i kapat (kill)
+
+Metin Seçimi ve Kes-Yapıştır:
+
+C-Space → Mark koy, seçim başlat
+
+C-w → Seçili alanı kes
+
+C-y → Kesilen metni yapıştır
+
+2. Vim
+
+Vim, klasik vi editörünün geliştirilmiş hâlidir (vi improved).
+
+Hızlı, hafif ve programcılar/sistem yöneticileri için uygundur.
+
+Linux, macOS ve Windows’ta yaygın olarak bulunur.
+
+Başlangıç:
+
+vim filename.txt
+
+Vim Modları
+
+Normal Mode → Komut çalıştırılır
+
+Insert Mode → Metin yazılır
+
+Insert Mode Komutları:
+
+Komut	İşlev
+i	İmlecin önüne metin ekler
+a	İmlecin arkasına metin ekler
+I	Satır başına metin ekler
+A	Satır sonuna metin ekler
+Vim Navigation (Hareket)
+Tuş	Hareket
+h veya ←	Bir karakter sola
+l veya →	Bir karakter sağa
+j	Bir satır aşağı
+k	Bir satır yukarı
+Vim Düzenleme Operatörleri
+
+Operator + Motion mantığıyla çalışır
+
+Komut	İşlev
+x	İmleç altındaki karakteri siler
+dw	İmleçten kelime sonuna kadar siler
+d$	Satır sonuna kadar siler
+dd	Mevcut satırı siler
+3dd	İmleçten itibaren 3 satırı siler
+cw	İmleçten kelime sonuna kadar değiştirir
+c$	Satır sonuna kadar değiştirir
+cc	Satırın tamamını değiştirir
+Kopyalama ve Yapıştırma
+Komut	İşlev
+yw	Kelimeyi kopyalar
+yy	Satırı kopyalar
+p	Kopyalanan metni imleçten sonra yapıştırır
+P	Kopyalanan metni imleçten önce yapıştırır
+Vim Arama
+
+/pattern → İleri arama
+
+?pattern → Geri arama
+
+n → Sonraki eşleşmeye gider
+
+N → Ters yönde eşleşmeye gider
+
+Kaydetme ve Çıkma
+Komut	İşlev
+:w	Dosyayı kaydet
+:q	Çıkış (değişiklik yoksa)
+:q!	Kaydedilmeyen değişiklikleri iptal ederek çıkış
+:wq	Kaydet ve çık
+ZZ	Kaydet ve çık
+Undo / Redo
+
+u → Son yapılan değişikliği geri al
+
+Ctrl-r → Geri alınan değişikliği tekrar uygula
+
+Bu hâliyle notun artık temiz, mantıksal ve öğrenmeye uygun oldu.
+
+
+ChatGPT hata yapabilir. Önemli bilgileri kontrol edin.
