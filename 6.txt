@@ -1,0 +1,212 @@
+
+
+# Linux I/O ve Metin İşleme Komutları (TextFU)
+
+## 1. Standart Çıkış ve Giriş
+
+Linux’ta her programın üç temel akışı vardır:
+
+| Akış   | Açıklama             | Varsayılan |
+| ------ | -------------------- | ---------- |
+| stdin  | Standart giriş       | Klavye     |
+| stdout | Standart çıkış       | Terminal   |
+| stderr | Standart hata çıkışı | Terminal   |
+
+### Örnek
+
+```bash
+echo "Hello World"
+```
+
+* Çıktı **stdout** üzerinden terminale yazılır.
+
+---
+
+## 2. Çıkışı Yönlendirme
+
+* `>` → Dosyaya yaz (varsa üzerine yazar)
+* `>>` → Dosyaya ekle
+
+```bash
+echo "Hello World" > file.txt   # Dosyayı oluşturur veya üzerine yazar
+echo "Hello Again" >> file.txt  # Dosyanın sonuna ekler
+```
+
+---
+
+## 3. Girdi Yönlendirme
+
+* `<` → Dosyadan veri alır (stdin)
+
+```bash
+cat < file.txt > output.txt
+```
+
+* `file.txt` içeriği okunur ve `output.txt`'ye yazılır.
+
+---
+
+## 4. Hata Akışı (stderr)
+
+* Hata mesajları `stderr` üzerinden gönderilir.
+* Sinyal numaraları:
+
+  * 0 → stdin
+  * 1 → stdout
+  * 2 → stderr
+
+### Örnek
+
+```bash
+ls /fake/directory > out.txt   # stdout dosyaya gider, hata ekranda kalır
+ls /fake/directory 2> error.txt # stderr dosyaya yönlendirilir
+ls /fake/directory > all.txt 2>&1  # stdout ve stderr aynı yere yönlendirilir
+```
+
+---
+
+## 5. Pipe (`|`)
+
+* Bir komutun çıktısını başka komutun girdisi olarak kullanır.
+
+```bash
+ls -la /etc | less
+```
+
+* `ls -la /etc` → stdout
+* `less` → stdin
+
+---
+
+## 6. Ortam Değişkenleri (ENV)
+
+* Shell ve programların erişebildiği sistem bilgilerini tutar.
+* Örnekler:
+
+```bash
+echo $HOME    # Kullanıcı home dizini
+echo $USER    # Kullanıcı adı
+echo $PATH    # Program arama yolları
+export TEST=test  # Geçici değişken oluşturma
+```
+
+---
+
+## 7. `cut` Komutu
+
+* Dosyalardaki metni **karakter veya alan bazlı** ayırır.
+* Seçenekler:
+
+  * `-c` → Karakter bazlı
+  * `-f` → Alan bazlı
+  * `-d` → Alan ayırıcısı
+
+### Örnekler
+
+```bash
+echo 'the quick brown;fox jumps' > file.txt
+cut -c 5 file.txt        # 5. karakteri alır
+cut -f 1 -d ";" file.txt # ; ayırıcıyla ilk alanı alır
+```
+
+---
+
+## 8. `paste` Komutu
+
+* Dosya satırlarını **yan yana birleştirir**
+
+```bash
+paste -s sample.txt
+```
+
+---
+
+## 9. `head` ve `tail`
+
+* `head` → Dosyanın başındaki satırları gösterir (default: 10)
+* `tail` → Dosyanın sonundaki satırları gösterir (default: 10)
+
+```bash
+head /var/log/syslog
+tail /var/log/syslog
+```
+
+---
+
+## 10. `expand` ve `unexpand`
+
+* `expand` → Tab karakterlerini boşluklara çevirir (default 8)
+* `unexpand` → Boşlukları tab’a çevirir
+
+```bash
+expand sample.txt
+unexpand result.txt
+```
+
+---
+
+## 11. `join` Komutu
+
+* Ortak alan üzerinden iki dosyayı birleştirir (varsayılan: ilk sütun)
+
+```bash
+join file1.txt file2.txt
+join -1 2 -2 1 file1.txt file2.txt
+```
+
+---
+
+## 12. `sort` Komutu
+
+* Satırları alfabetik veya sayısal olarak sıralar
+
+```bash
+sort file1.txt
+```
+
+---
+
+## 13. `tr` Komutu
+
+* Karakterleri değiştirmek, silmek veya tekrarlardan kurtarmak için kullanılır
+
+```bash
+echo "hello world" | tr a-z A-Z
+# Çıktı: HELLO WORLD
+```
+
+---
+
+## 14. `uniq` Komutu
+
+* Tekrarlayan ardışık satırları filtreler
+
+```bash
+uniq file.txt
+```
+
+* Tekrar eden satırları siler; yalnızca **yan yana ardışık tekrarlar** kontrol edilir.
+
+---
+
+## 15. `wc` ve `nl`
+
+* `wc` → Dosya içindeki **satır, kelime ve byte sayısı**
+* `nl` → Satır numarası ekleyerek gösterir
+
+```bash
+wc /etc/passwd
+nl file1.txt
+```
+
+---
+
+## 16. `grep` Komutu
+
+* Dosya içindeki **belirli bir paterni arar**
+* `-e` → Pattern belirleme (özellikle `-` ile başlayan ifadelerde)
+
+```bash
+grep "pattern" file.txt
+grep -e "-v" file.conf
+```
