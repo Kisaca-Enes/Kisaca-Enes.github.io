@@ -1,0 +1,283 @@
+
+# Shell ve Temel Komutlar
+
+## Shell Nedir?
+
+* Shell, kullanıcı komutlarını işletim sistemine ileten bir yapıdır.
+* En yaygın shell türü: **Bash Shell**
+* Terminal üzerinde çalışır ve varsayılan kabuk olarak kabul edilebilir.
+* Terminal açtığımızda bizi karşılayan yapı shell’dir.
+
+---
+
+## Temel Komutlar
+
+### 1. `pwd`
+
+* Linux’ta geçerli dizini öğrenmek için kullanılır.
+* Kullanım:
+
+```bash
+pwd
+```
+
+* Çıktı, bulunduğunuz **mutlak konumu** gösterir.
+
+---
+
+### 2. `cd`
+
+* Mevcut dizinler arasında geçiş yapmak için kullanılır.
+* Kullanım:
+
+```bash
+cd /home
+```
+
+* Örnek: `/home` içindeyseniz `/home/a` dizinine gitmek için:
+
+```bash
+cd a
+```
+
+---
+
+### 3. `ls`
+
+* Dizin içeriğini listeler (dosya, klasör, program vb.).
+* Kullanım:
+
+```bash
+ls /home/a
+```
+
+* Ayrıntılı bilgi için:
+
+```bash
+ls -l
+```
+
+---
+
+### 4. `touch`
+
+* Dosya oluşturma ve zaman damgasını değiştirme gibi görevleri vardır.
+* Boş dosya oluşturmak:
+
+```bash
+touch dosya_adı
+```
+
+* Birden fazla dosya oluşturmak:
+
+```bash
+touch dosya1 dosya2 dosya3
+```
+
+* Zaman damgasını değiştirmek:
+
+```bash
+touch -t YYYYMMDDHHMM dosya_adı
+```
+
+---
+
+### 5. `file`
+
+* Dosyanın gerçek formatını gösterir.
+* Kullanım:
+
+```bash
+file a.jpg
+```
+
+---
+
+### 6. `cat`
+
+* Dosya içeriğini görüntülemek veya birleştirmek için kullanılır.
+* Tek dosya:
+
+```bash
+cat notlarım.txt
+```
+
+* Birden fazla dosya:
+
+```bash
+cat not1.txt not2.txt
+```
+
+* Yeni dosya oluşturmak ve içerik eklemek:
+
+```bash
+cat > newfile
+```
+
+> Dikkat: Dosya zaten varsa üzerine yazar.
+
+---
+
+### 7. `less`
+
+* Büyük dosyalarda gezinmek için kullanılır.
+* Kullanım:
+
+```bash
+less /home/user/Documents/text1
+```
+
+* Yön tuşları ile içerikte gezebilirsiniz.
+
+---
+
+### 8. `history`
+
+* Daha önce çalıştırılan komutları listeler.
+* Örnek:
+
+```bash
+history
+```
+
+* `!!` ile en son çalıştırılan komutu tekrar çalıştırabilirsiniz.
+
+---
+
+### 9. `cp`
+
+* Dosya veya klasörü kopyalar.
+* Kullanım:
+
+```bash
+cp [kaynak] [hedef]
+cp file /home/user/Documents
+```
+
+* Joker karakterler:
+
+  * `*` : herhangi bir karakter dizisi
+  * `?` : tek karakter
+  * `[]` : içindeki karakterlerden herhangi biri
+
+---
+
+### 10. `mv`
+
+* Dosya veya klasörü yeniden adlandırır veya taşır.
+* Kullanım:
+
+```bash
+mv old_name new_name
+mv file /hedef/dizin
+```
+
+---
+
+### 11. `mkdir`
+
+* Yeni dizin oluşturur.
+* Kullanım:
+
+```bash
+mkdir dizin_adi
+```
+
+* Birden fazla dizin oluşturmak:
+
+```bash
+mkdir dizin1 dizin2
+```
+
+---
+
+### 12. `rm`
+
+* Dosya veya dizinleri siler. Çok güçlüdür, dikkatli olunmalıdır.
+* Örnek:
+
+```bash
+rm dosya.txt
+rm -rf dizin/
+```
+
+* `-f` : zorla silme
+* `-i` : onay ile silme
+
+---
+
+### 13. `find`
+
+* Sistem içindeki dosya veya dizinleri arar.
+* Kullanım:
+
+```bash
+find /path -name "dosya_adı"
+```
+
+---
+
+### 14. `help`
+
+* Komutların nasıl kullanılacağını ve seçeneklerini özetler.
+* Kullanım:
+
+```bash
+help [komut]
+[komut --help]
+```
+
+---
+
+### 15. `man`
+
+* Komutların kullanım kılavuzunu gösterir.
+* Kullanım:
+
+```bash
+man [komut]
+```
+
+---
+
+### 16. `whatis`
+
+* Komutun kısa ve tek satırlık açıklamasını gösterir.
+* Kullanım:
+
+```bash
+whatis [komut]
+```
+
+---
+
+### 17. `alias`
+
+* Komutları kısaltmak için kullanılır.
+* Örnek:
+
+```bash
+alias ll='ls -la'
+ll  # artık ls -la çalışır
+```
+
+* Kalıcı yapmak için:
+
+```bash
+nano ~/.bashrc
+alias ll='ls -la'
+alias update='sudo apt update && sudo apt upgrade'
+```
+
+---
+
+### 18. `exit`
+
+* Terminalden çıkmak için kullanılır.
+* Kullanım:
+
+```bash
+exit
+```
+
+
